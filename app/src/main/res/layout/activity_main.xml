@@ -13,6 +13,14 @@
         android:text="Play"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+    <Button
+        android:id="@+id/sc_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PlaySC"
+        tools:layout_editor_absoluteX="280dp"
+        tools:layout_editor_absoluteY="447dp" />
+
 
 
 </android.support.constraint.ConstraintLayout>

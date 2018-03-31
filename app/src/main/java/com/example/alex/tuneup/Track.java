@@ -13,14 +13,15 @@ public interface Track {
     String getTitle();
     String getArtist();
     String getAlbum();
+    //TODO Add album art and length fields to implement in both
     Object getPlayer();
+
 
     //Setter functions
     void setUri(String newUri);
     void setTitle(String newTitle);
     void setArtist(String newArtist);
-    void setAlbum(String newArtist);
-    void initializePlayer(Config c);
+    void setAlbum(String newAlbum);
 
 /*
 note that initializePlayer and getPlayer will likely be re-evaluated once we determine

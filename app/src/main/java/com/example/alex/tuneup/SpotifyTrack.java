@@ -3,6 +3,7 @@ package com.example.alex.tuneup;
 import android.util.Log;
 
 
+
 import com.spotify.sdk.android.player.Player;
 
 import com.spotify.sdk.android.player.Config;
@@ -22,21 +23,22 @@ import org.json.JSONObject;
 
 public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
     private String uri, title, artist, album;
+    private final String source = "sp";
     private Player mPlayer = null;
     boolean playing = false;
 
-
     //Parameterless constructor for testing purposes
-    public SpotifyTrack(){
-        uri = "spotify:track:2TpxZ7JUBn3uw46aR7qd6V";
-        title = "title";
-        artist = "artist";
-        album = "album";
+    public SpotifyTrack(Config c){
+        uri = "spotify:track:3kwql90R2gmkK12R8uGHCs";
+        title = "Radioactivity";
+        artist = "Kraftwerk";
+        album = "Radioactivity ";
+        initializePlayer(c);
 
     }
 
 
-    public SpotifyTrack(JSONObject j){
+    public SpotifyTrack(JSONObject j, Config c){
         try {
             //Subject to change, precise JSON values are TBD
             uri = j.getString("uri");
@@ -47,12 +49,17 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
             //Later on, implement this in an error message to user.
             Log.i("Error", e.getMessage());
         }
+        initializePlayer(c);
+
     }
 
     @Override
     public String getUri() {
         return uri;
     }
+
+
+    //TODO: Just make a boolean isInitialized method
 
     @Override
     public String getTitle() {
@@ -128,24 +135,26 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
 
     }
 
-    public void initializePlayer(Config c){
+    private void initializePlayer(Config c){
         Spotify.getPlayer(c, this, new SpotifyPlayer.InitializationObserver() {
             @Override
             public void onInitialized(SpotifyPlayer spotifyPlayer) {
                 mPlayer = spotifyPlayer;
                 mPlayer.addConnectionStateCallback(SpotifyTrack.this);
                 mPlayer.addNotificationCallback(SpotifyTrack.this);
-                mPlayer.playUri(null, "spotify:track:2TpxZ7JUBn3uw46aR7qd6V", 0, 0);
 
             }
 
 
             @Override
             public void onError(Throwable throwable) {
-                Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
+                Log.i("MainActivity", "Could not initialize player: " + throwable.getMessage());
             }
         });
-        mPlayer.playUri(null, "spotify:track:2TpxZ7JUBn3uw46aR7qd6V", 0, 0);
+
+
+        Log.i("mPlayer", "Player Created");
+
 
 
     }
@@ -160,7 +169,7 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
     public void onPlaybackError(Error error) {
         //TODO: Write code to halt playback and present error message to user, should also throw up to the lobbyactivity to make
         //The next song in the queue play.
-
+        Log.i("Playback Error", error.name());
     }
 
     //Overridden Methods for implementation of ConnectionStateCallback
@@ -176,6 +185,8 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
     }
 
     public void onLoggedIn() {
+        mPlayer.playUri(null, uri, 0, 0);
+        playing  = true;
         Log.i("SpotifyPlayer", "User logged in");
     }
 
