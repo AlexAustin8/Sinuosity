@@ -14,7 +14,11 @@ import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.Config;
 
-import com.spotify.sdk.android.player.Player;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 
 
 public class MainActivity extends AppCompatActivity  {
@@ -25,8 +29,6 @@ public class MainActivity extends AppCompatActivity  {
     private Button playButton, scButton;
     private Config playerConfig;
     private Track currentTrack, scTrack;
-    private Player mPlayer;
-    private MediaPlayer mMediaPlayer =new MediaPlayer();
     private String scClient = "45c06cc5419304c3b7d6f594db5d9b72";
 
 
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity  {
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
 
         //Create Sample SoundCloudTrackObject
-        //scTrack = new SoundCloudTrack();
+        scTrack = new SoundCloudTrack();
 
 
     }

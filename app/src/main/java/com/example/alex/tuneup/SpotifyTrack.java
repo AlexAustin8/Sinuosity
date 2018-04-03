@@ -22,7 +22,7 @@ import org.json.JSONObject;
  */
 
 public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
-    private String uri, title, artist, album;
+    private String uri, title, artist, album, artUri;
     private final String source = "sp";
     private Player mPlayer = null;
     boolean playing = false;
@@ -81,6 +81,11 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
     }
 
     @Override
+    public String getArtUri() {
+        return artUri;
+    }
+
+    @Override
     public boolean isPlaying(){
         return playing;
     }
@@ -107,6 +112,11 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
     public void setAlbum(String newAlbum) {
         album = newAlbum;
 
+    }
+
+    @Override
+    public void setArtUri(String u) {
+        artUri = u;
     }
 
 

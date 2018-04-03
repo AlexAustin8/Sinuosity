@@ -14,7 +14,7 @@ import org.json.JSONObject;
  */
 
 public class SoundCloudTrack implements Track {
-    private String uri, title, artist, album;
+    private String uri, title, artist, album, artUri;
     private String scClient = "45c06cc5419304c3b7d6f594db5d9b72";
     private String prefix = "http://api.soundcloud.com/tracks/";
     private String postfix = "/stream?client_id=" + scClient;
@@ -67,6 +67,11 @@ public class SoundCloudTrack implements Track {
     }
 
     @Override
+    public String getArtUri() {
+        return artUri;
+    }
+
+    @Override
     public Object getPlayer() {
         return mPlayer;
     }
@@ -87,6 +92,11 @@ public class SoundCloudTrack implements Track {
     public void setArtist(String newArtist) {
         artist = newArtist;
 
+    }
+
+    @Override
+    public void setArtUri(String u) {
+        artUri = u;
     }
 
     @Override

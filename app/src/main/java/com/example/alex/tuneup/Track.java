@@ -12,6 +12,7 @@ public interface Track {
     String getUri();
     String getTitle();
     String getArtist();
+    String getArtUri();
     String getAlbum();
     //TODO Add album art and length fields to implement in both
     Object getPlayer();
@@ -22,8 +23,10 @@ public interface Track {
     void setTitle(String newTitle);
     void setArtist(String newArtist);
     void setAlbum(String newAlbum);
+    void setArtUri(String u);
 
-/*
+
+    /*
 note that initializePlayer and getPlayer will likely be re-evaluated once we determine
 how soundcloud tracks will be implemented
  */

@@ -17,6 +17,9 @@ android {
         }
     }
 }
+dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:+'
+}
 allprojects {
     repositories {
         maven { url 'https://jitpack.io' }
