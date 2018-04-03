@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.alex.tuneup.SearchActivity">
+
+
+
+    <EditText
+        android:id="@+id/search_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_hint"
+        android:inputType="text"
+        android:lines="4"
+        app:layout_constraintTop_toBottomOf="@+id/total_prompt" />
+
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/search_selection"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/search_input">
+
+        <RadioButton
+            android:id="@+id/song_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/song_search_hint" />
+
+        <RadioButton
+            android:id="@+id/artist_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/artist_search_hint" />
+
+    </RadioGroup>
+
+
+    <ListView
+        android:id="@+id/result_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:divider="@android:color/black"
+        android:dividerHeight="5.0sp"
+        app:layout_constraintTop_toBottomOf="@+id/search_selection">
+
+    </ListView>
+
+</android.support.constraint.ConstraintLayout>
