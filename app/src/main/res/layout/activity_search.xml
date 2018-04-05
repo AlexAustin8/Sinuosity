@@ -14,8 +14,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/search_hint"
         android:inputType="text"
-        android:lines="4"
-        app:layout_constraintTop_toBottomOf="@+id/total_prompt" />
+        android:lines="4" />
 
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
