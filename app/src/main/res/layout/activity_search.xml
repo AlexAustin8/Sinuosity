@@ -25,18 +25,18 @@
         app:layout_constraintTop_toBottomOf="@+id/search_input">
 
         <RadioButton
-            android:id="@+id/song_search"
+            android:id="@+id/soundcloud_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onRadioButtonClicked"
-            android:text="@string/song_search_hint" />
+            android:text = "@string/soundcloud_search_hint" />
 
         <RadioButton
-            android:id="@+id/artist_search"
+            android:id="@+id/spotify_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onRadioButtonClicked"
-            android:text="@string/artist_search_hint" />
+            android:text= "@string/spotify_search_hint" />
 
     </RadioGroup>
 

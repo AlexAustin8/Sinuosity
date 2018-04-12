@@ -1,6 +1,7 @@
 package com.example.alex.tuneup;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -10,15 +11,22 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
-    ArrayList<Track> results = new ArrayList<>();
+    ArrayList<JSONObject> results;
+    TrackAdapter adapter;
     RadioGroup selections;
-    RadioButton bySong, byArtist;
+    RadioButton scSearch, spSearch;
     EditText searchBar;
     ListView resultList;
+    String term;
+
 
 
     @Override
@@ -26,14 +34,16 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+                // new Async_Search().execute("https://jailbreakme.ml/sinc/search/spotify.php", )
+
         //TODO: Create code to parse JSON into Track objects that are placed into results
 
         selections = this.findViewById(R.id.search_selection);
-        bySong = this.findViewById(R.id.song_search);
-        byArtist = this.findViewById(R.id.artist_search);
+        spSearch = this.findViewById(R.id.spotify_search);
+        scSearch = this.findViewById(R.id.soundcloud_search);
         searchBar = this.findViewById(R.id.search_input);
         resultList = this.findViewById(R.id.result_list);
-        bySong.toggle();
+        spSearch.toggle();
         searchBar.setOnKeyListener(mKeyListener);
         resultList.setOnItemClickListener(mListener);
 
@@ -49,12 +59,30 @@ public class SearchActivity extends AppCompatActivity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
 
             switch(selections.getCheckedRadioButtonId()){
-                case R.id.song_search:
-                    //TODO: Make server request to return search results by Song so that results is populated, call an Async task
+                case R.id.spotify_search:
+                    term = searchBar.getText().toString();
+                    try {
+                        results = new Async_Search().execute("https://jailbreakme.ml/sinc/search/spotify.php", term).get();
+                    }catch (Exception e){
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    adapter = new TrackAdapter(getApplicationContext(), results);
+                    resultList.setAdapter(adapter);
+
 
                     break;
-                case R.id.artist_search:
-                    //TODO: Make server request to return search results by artists (Spotify only) so that results is populated, call an Async task
+                case R.id.soundcloud_search:
+                    term = searchBar.getText().toString();
+                    try {
+                        results = new Async_Search().execute("https://jailbreakme.ml/sinc/search/spotify.php", term).get();
+                    }catch (Exception e){
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    adapter = new TrackAdapter(getApplicationContext(), results);
+                    resultList.setAdapter(adapter);
+
+
+                    break;
             }
             return false;
         }
@@ -64,11 +92,7 @@ public class SearchActivity extends AppCompatActivity {
     private AdapterView.OnItemClickListener mListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int p, long id) {
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            //Make server request to post selected item.
 
-            //Return to the lobby activity.
-            startActivity(i);
         }
     };
 

@@ -18,8 +18,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="PlaySC"
-        tools:layout_editor_absoluteX="280dp"
-        tools:layout_editor_absoluteY="447dp" />
+        app:layout_constraintBottom_toTopOf="@+id/play_button" />
+
+
+    <Button
+        android:id="@+id/search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        app:layout_constraintBottom_toTopOf="@+id/sc_button" />
 
 
 
