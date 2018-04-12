@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity  {
     private static final String REDIRECT_URI = "tuneup-log://callback";
     private static final int REQUEST_CODE = 1337;
 
-    private Button playButton, scButton;
+    private Button playButton, scButton, searchButton;
     private Config playerConfig;
     private Track currentTrack, scTrack;
     private String scClient = "45c06cc5419304c3b7d6f594db5d9b72";
@@ -38,9 +38,11 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         playButton = this.findViewById(R.id.play_button);
         scButton = this.findViewById(R.id.sc_button);
+        searchButton = this.findViewById(R.id.search_button);
 
         scButton.setOnClickListener(scButtonListener);
         playButton.setOnClickListener(buttonListener);
+        searchButton.setOnClickListener(searchButtonListener);
 
 
         //Prep and run the login activity to get config object for Spotify stream
@@ -79,6 +81,17 @@ public class MainActivity extends AppCompatActivity  {
             } else {
                 scTrack.pause();
             }
+        }
+
+
+    };
+
+
+    private View.OnClickListener searchButtonListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent i = new Intent(getApplicationContext(), SearchActivity.class);
+
+            startActivity(i);
         }
 
 

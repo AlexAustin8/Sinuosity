@@ -2,12 +2,16 @@ package com.example.alex.tuneup;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -18,9 +22,9 @@ import java.util.ArrayList;
 public class TrackAdapter extends BaseAdapter{
     private Context mContext;
     private LayoutInflater mInflater;
-    private ArrayList<Track> mDataSource;
+    private ArrayList<JSONObject> mDataSource;
 
-    public TrackAdapter(Context context, ArrayList<Track> results){
+    public TrackAdapter(Context context, ArrayList<JSONObject> results){
         mContext = context;
         mDataSource = results;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -47,10 +51,15 @@ public class TrackAdapter extends BaseAdapter{
         TextView artistView = rowView.findViewById(R.id.artist_name);
         ImageView albumartView = rowView.findViewById(R.id.album_art);
 
-        Track t = (Track) getItem(position);
-        titleView.setText("Command: " + t.getTitle());
-        artistView.setText("Example: " + t.getArtist());
-        albumartView.setImageURI(Uri.parse(t.getArtUri()));
+        JSONObject j = (JSONObject) getItem(position);
+        try {
+            titleView.setText("Command: " + j.getString("title"));
+            artistView.setText("Example: " + j.getString("artist"));
+            albumartView.setImageURI(Uri.parse(j.getString("artwork_url")));
+        }catch (Exception e){
+            Log.i("JSON Error", e.getMessage());
+
+        }
 
 
         return rowView;
