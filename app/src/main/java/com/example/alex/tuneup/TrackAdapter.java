@@ -1,7 +1,10 @@
 package com.example.alex.tuneup;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
 
 import org.json.JSONObject;
 
@@ -53,9 +61,15 @@ public class TrackAdapter extends BaseAdapter{
 
         JSONObject j = (JSONObject) getItem(position);
         try {
-            titleView.setText("Command: " + j.getString("title"));
-            artistView.setText("Example: " + j.getString("artist"));
-            albumartView.setImageURI(Uri.parse(j.getString("artwork_url")));
+            String title = j.getString("title");
+            title = URLDecoder.decode(title, "UTF-8");
+            String artist = j.getString("artist");
+            artist = URLDecoder.decode(artist, "UTF-8");
+            titleView.setText(title);
+            artistView.setText(artist);
+            String urlString = URLDecoder.decode(j.getString("artwork_url"), "UTF-8");
+            Bitmap img = new GetAlbumArt().execute(urlString).get();
+            albumartView.setImageBitmap(img);
         }catch (Exception e){
             Log.i("JSON Error", e.getMessage());
 
@@ -64,4 +78,8 @@ public class TrackAdapter extends BaseAdapter{
 
         return rowView;
     }
-}
+
+
+
+
+    }
