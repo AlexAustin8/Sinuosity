@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,13 +29,12 @@ public class SearchActivity extends AppCompatActivity {
     String term;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-                // new Async_Search().execute("https://jailbreakme.ml/sinc/search/spotify.php", )
+        // new Async_Search().execute("https://jailbreakme.ml/sinc/search/spotify.php", )
 
         //TODO: Create code to parse JSON into Track objects that are placed into results
 
@@ -58,12 +58,13 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-            switch(selections.getCheckedRadioButtonId()){
+            switch (selections.getCheckedRadioButtonId()) {
                 case R.id.spotify_search:
                     term = searchBar.getText().toString();
+                    Log.i("SearchTerm", term);
                     try {
                         results = new Async_Search().execute("https://jailbreakme.ml/sinc/search/spotify.php", term).get();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     adapter = new TrackAdapter(getApplicationContext(), results);
@@ -74,8 +75,8 @@ public class SearchActivity extends AppCompatActivity {
                 case R.id.soundcloud_search:
                     term = searchBar.getText().toString();
                     try {
-                        results = new Async_Search().execute("https://jailbreakme.ml/sinc/search/spotify.php", term).get();
-                    }catch (Exception e){
+                        results = new Async_Search().execute("https://jailbreakme.ml/sinc/search/soundcloud.php", term).get();
+                    } catch (Exception e) {
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     adapter = new TrackAdapter(getApplicationContext(), results);
@@ -92,9 +93,18 @@ public class SearchActivity extends AppCompatActivity {
     private AdapterView.OnItemClickListener mListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int p, long id) {
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            Toast.makeText(getApplicationContext(), "Song Added to Queue", Toast.LENGTH_SHORT);
+            startActivity(i);
 
         }
     };
+
+
+
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+    }
 
 
 

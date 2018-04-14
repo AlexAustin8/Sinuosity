@@ -10,8 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/result_padding"
+        android:paddingRight="20dip"
         android:text="Song Title"
+        android:lines="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="18sp"
         android:visibility="visible"
         app:layout_constraintLeft_toRightOf="@+id/album_art" />
 
@@ -21,8 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/result_padding"
-        android:visibility="visible"
+        android:paddingRight="20dip"
         android:text="Artist"
+        android:lines="1"
+        android:visibility="visible"
         app:layout_constraintLeft_toRightOf="@+id/album_art"
         app:layout_constraintTop_toBottomOf="@+id/song_title" />
 

@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.net.URLDecoder;
 
 import org.json.JSONObject;
 
@@ -53,9 +54,13 @@ public class TrackAdapter extends BaseAdapter{
 
         JSONObject j = (JSONObject) getItem(position);
         try {
-            titleView.setText("Command: " + j.getString("title"));
-            artistView.setText("Example: " + j.getString("artist"));
-            albumartView.setImageURI(Uri.parse(j.getString("artwork_url")));
+            String title = j.getString("title");
+            title = URLDecoder.decode(title, "UTF-8");
+            String artist = j.getString("artist");
+            artist = URLDecoder.decode(artist, "UTF-8");
+            titleView.setText(title);
+            artistView.setText(artist);
+            albumartView.setImageURI(Uri.parse(URLDecoder.decode(j.getString("artwork_url"), "UTF-8")));
         }catch (Exception e){
             Log.i("JSON Error", e.getMessage());
 

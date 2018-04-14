@@ -76,6 +76,8 @@ public class Async_Search extends AsyncTask<String, Integer, ArrayList<JSONObjec
                // return sb.toString();
                 String result = sb.toString();
 
+                Log.i("THE JSON ARRAY WILL BE", result);
+
                 JSONArray jsonArray;
                 try{
                     jsonArray = new JSONArray(result);
