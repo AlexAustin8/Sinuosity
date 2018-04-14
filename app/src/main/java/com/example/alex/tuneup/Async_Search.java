@@ -95,7 +95,7 @@ public class Async_Search extends AsyncTask<String, Integer, ArrayList<JSONObjec
                             Log.i("objPrint", "title: " + title);
                             Log.i("objPrint", "artist: " + artist);
                             Log.i("objPrint", "duration: " + duration);
-                            Log.i("objPrint", "artwork: " + artist);
+                            Log.i("objPrint", "artwork: " + artwork_url);
 
                         }
                         catch(Exception e){

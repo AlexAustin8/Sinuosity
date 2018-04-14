@@ -33,24 +33,25 @@ public class HomeActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.create_button:
-                    //Todo: create the createLobbyActivity class and replace MainActivity.class with the proper file
+                    //TODO: create the createLobbyActivity class and replace MainActivity.class with the proper file
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);
                     break;
 
                 case R.id.submit_lobby_search:
                     String key = entry.getText().toString();
-                    String responseCode = "y";
+                    String responseCode = "n";
                     /*TODO: In this case, we make a call to server searching for the key. If the response says that the server could not be found,
                       then we make a toast message to the user in inform them of the error. Else we launch a new intent to the lobby activity, with
                       info needed to connect to right lobby
                      */
-                    if(responseCode.compareTo("n") ==0){
+                    if(responseCode.compareTo("n") == 0){
                         Toast.makeText(getApplicationContext(), "Could not find lobby, please enter new key", Toast.LENGTH_SHORT).show();
                     }else{
                         Intent in = new Intent(getApplicationContext(), MainActivity.class);
+                        //Key to properly initialize lobby activity once loaded
                         in.putExtra("lobbyKey", key);
-                        startActivity(i);
+                        startActivity(in);
                     }
 
             }
