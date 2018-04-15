@@ -90,11 +90,10 @@
             </LinearLayout>
             <ListView
                 android:id="@+id/result_list"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="@android:color/black"
-                android:dividerHeight="5.0sp"
-                app:layout_constraintTop_toBottomOf="@+id/search_selection"/>
+                android:dividerHeight="10dp"
+                android:layout_margin="10dp" />
 
         </LinearLayout>
 
