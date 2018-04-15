@@ -16,7 +16,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/bBack"
             android:layout_width="35dp"
             android:layout_height="35dp"
 
@@ -38,10 +38,9 @@
             android:layout_centerVertical="true"/>
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/bSetting"
             android:layout_width="35dp"
             android:layout_height="35dp"
-
             android:layout_weight="1"
             android:src="@drawable/settings"
             android:layout_centerVertical="true"

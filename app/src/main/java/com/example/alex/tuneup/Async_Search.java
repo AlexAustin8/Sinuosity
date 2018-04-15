@@ -2,13 +2,10 @@ package com.example.alex.tuneup;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -17,18 +14,22 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by andrewclark on 3/8/18.
+ * Created by alex on 4/10/18.
  */
 
-public class async_search extends AsyncTask<String, String, String> {
+public class Async_Search extends AsyncTask<String, Integer, ArrayList<JSONObject>> {
     protected void onPreExecute(){}
 
-    protected String doInBackground(String... params) {
+    protected ArrayList<JSONObject> doInBackground(String... params) {
+        ArrayList<JSONObject> results = new ArrayList<>();
+
 
         try {
 
@@ -72,58 +73,48 @@ public class async_search extends AsyncTask<String, String, String> {
                 }
 
                 in.close();
-                return sb.toString();
+                // return sb.toString();
+                String result = sb.toString();
+
+
+
+                JSONArray jsonArray;
+                try{
+                    jsonArray = new JSONArray(result);
+                    for (int i = 0; i < jsonArray.length() ; i++) {
+                        try{
+                            JSONObject object1 = jsonArray.getJSONObject(i);
+                            results.add(object1);
+                            String uri = object1.getString("uri");
+                            String title = object1.getString("title");
+                            String artist = object1.getString("artist");
+                            String duration = object1.getString("duration");
+                            String artwork_url = object1.getString("artwork_url");
+                            String src = object1.getString("src");
+
+
+                        }
+                        catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                } catch(Exception e) {
+                    Log.i("Json Error", e.getMessage());
+                }
 
             }
             else {
-                return new String("false : "+responseCode);
+                Log.i("False Response Code: ", String.valueOf(responseCode));
+                return null;
             }
         }
         catch(Exception e){
-            return new String("Exception: " + e.getMessage());
+            Log.i("Exception", e.getMessage());
+            return null;
         }
 
+        return results;
     }
-
-    @Override
-    protected void onPostExecute(String result) {
-        int resultLen = result.length();
-//        result = result.substring(1, resultLen-1);
-        Log.i("Post Exec", result);
-
-
-        JSONArray jsonArray;
-        try{
-            jsonArray = new JSONArray(result);
-            for (int i = 0; i < jsonArray.length() ; i++) {
-                try{
-                    JSONObject object1 = jsonArray.getJSONObject(i);
-                    String uri = object1.getString("uri");
-                    String title = object1.getString("title");
-                    String artist = object1.getString("artist");
-                    String duration = object1.getString("duration");
-                    String artwork_url = object1.getString("artwork_url");
-                    Log.i("objPrint", "------------------------");
-                    Log.i("objPrint", "URI: " + uri);
-                    Log.i("objPrint", "title: " + title);
-                    Log.i("objPrint", "artist: " + artist);
-                    Log.i("objPrint", "duration: " + duration);
-                    Log.i("objPrint", "artwork: " + artist);
-
-                }
-                catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-        } catch(Exception e) {
-            Log.i("Json Error", e.getMessage());
-        }
-
-
-
-
-    }
-
 
 
 
@@ -153,9 +144,3 @@ public class async_search extends AsyncTask<String, String, String> {
         return result.toString();
     }
 }
-
-
-
-
-
-

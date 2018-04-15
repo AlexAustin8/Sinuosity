@@ -17,7 +17,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/bBack"
             android:layout_width="35dp"
             android:layout_height="35dp"
 
@@ -39,10 +39,9 @@
             android:layout_centerVertical="true"/>
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/bSetting"
             android:layout_width="35dp"
             android:layout_height="35dp"
-
             android:layout_weight="1"
             android:src="@drawable/settings"
             android:layout_centerVertical="true"
@@ -165,7 +164,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginTop="6dp"
             android:layout_marginLeft="10dp"
-            android:text="CHILL VIBES"
+            android:text="CERTIFIED PEARLS"
             android:textColor="#ffffff"
             android:textSize="22sp"
             android:textStyle="bold"
@@ -225,7 +224,7 @@
                 android:layout_marginTop="-50dp"
                 >
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/bViewQueue"
                     android:layout_width="150dp"
                     android:layout_height="30dp"
                     android:background="@drawable/lobby_buttons"
@@ -238,7 +237,7 @@
                     />
 
                 <Button
-                    android:id="@+id/button4"
+                    android:id="@+id/bAddSong"
                     android:layout_width="150dp"
                     android:layout_height="30dp"
                     android:background="@drawable/lobby_buttons"

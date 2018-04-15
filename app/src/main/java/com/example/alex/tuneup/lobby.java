@@ -3,14 +3,20 @@
 
 package com.example.alex.tuneup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 public class lobby extends Activity {
+    public Button bViewQueue, bAddSong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +37,38 @@ public class lobby extends Activity {
                         ViewGroup.LayoutParams.FILL_PARENT,
                         ViewGroup.LayoutParams.FILL_PARENT));
 
-    }
 
+        final LayoutInflater factory = getLayoutInflater();
+        final View topLayout = factory.inflate(R.layout.lobby_top, null);
+        Button searchButton = (Button) findViewById(R.id.bAddSong);
+        Button viewQueue = (Button) findViewById(R.id.bViewQueue);
+        ImageView backButton = (ImageView) findViewById(R.id.bBack);
+
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), home.class);
+                startActivity(i);
+            }
+        });
+
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), search.class);
+                startActivity(i);
+            }
+        });
+
+        viewQueue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(lobby.this, "Hello", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
 
 }

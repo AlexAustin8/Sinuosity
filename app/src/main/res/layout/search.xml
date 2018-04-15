@@ -26,51 +26,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-           >
+            >
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
-
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/radioButton"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/search_input"
+                android:hint="Enter a song"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Spotify"
-                android:textColor="#ffffff" />
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="" />
 
-            <RadioButton
-                android:id="@+id/radioButton2"
-                android:layout_width="wrap_content"
+            <RadioGroup
+                android:id="@+id/search_selection"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="SoundCloud"
-                android:textColor="#ffffff" />
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/spotify_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Spotify"
+                    android:textColor="#ffffff" />
+
+                <RadioButton
+                    android:id="@+id/soundcloud_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="SoundCloud"
+                    android:textColor="#ffffff"
+                    android:checked="false"/>
 
 
 
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/searchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Search"/>
+            </RadioGroup>
 
             <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:id="@+id/result_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:divider="@android:color/black"
+                android:dividerHeight="5.0sp"
+                app:layout_constraintTop_toBottomOf="@+id/search_selection"/>
 
         </LinearLayout>
 
