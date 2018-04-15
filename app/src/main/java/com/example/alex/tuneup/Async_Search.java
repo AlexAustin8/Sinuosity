@@ -1,5 +1,6 @@
 package com.example.alex.tuneup;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -24,10 +25,19 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by alex on 4/10/18.
  */
 
-public class Async_Search extends AsyncTask<String, Integer, ArrayList<JSONObject>> {
+public class Async_Search extends AsyncTask<String, Integer, TrackAdapter> {
+
+
+    Context context;
+
+    public Async_Search(Context context) {
+        this.context = context;
+    }
+
+    TrackAdapter adapter;
     protected void onPreExecute(){}
 
-    protected ArrayList<JSONObject> doInBackground(String... params) {
+    protected TrackAdapter doInBackground(String... params) {
         ArrayList<JSONObject> results = new ArrayList<>();
 
 
@@ -112,8 +122,8 @@ public class Async_Search extends AsyncTask<String, Integer, ArrayList<JSONObjec
             Log.i("Exception", e.getMessage());
             return null;
         }
-
-        return results;
+        adapter = new TrackAdapter(context, results);
+        return adapter;
     }
 
 
