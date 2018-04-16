@@ -13,7 +13,7 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.Config;
-
+import com.spotify.sdk.android.player.Spotify;
 
 
 import java.util.ArrayList;
@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity  {
         playButton = this.findViewById(R.id.play_button);
         scButton = this.findViewById(R.id.sc_button);
         searchButton = this.findViewById(R.id.search_button);
+
+
 
         scButton.setOnClickListener(scButtonListener);
         playButton.setOnClickListener(buttonListener);
