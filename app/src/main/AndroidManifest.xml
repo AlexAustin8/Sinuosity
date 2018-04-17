@@ -23,7 +23,9 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".CreateLobbyActivity"></activity>
+        <activity android:name=".CreateLobbyActivity" />
+        <activity android:name=".NonStreamLobbyActivity" />
+        <activity android:name=".ViewQueueActivity"></activity>
     </application>
 
 </manifest>
