@@ -7,10 +7,12 @@ import android.util.Log;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLDecoder;
 
 /**
  * Created by alex on 4/14/18.
  */
+
 
 public class GetAlbumArt extends AsyncTask<String, Integer, Bitmap> {
 
@@ -19,6 +21,7 @@ public class GetAlbumArt extends AsyncTask<String, Integer, Bitmap> {
         Bitmap img = null;
         String urlString = Strings[0];
         try {
+            urlString = URLDecoder.decode(urlString, "UTF-8");
             InputStream in = new URL(urlString).openStream();
             img = BitmapFactory.decodeStream(in);
         }catch(Exception e){

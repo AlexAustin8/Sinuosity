@@ -1,6 +1,5 @@
 package com.example.alex.tuneup;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
@@ -16,11 +15,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class search extends Activity {
+public class v_search extends Activity {
 
     TrackAdapter adapter;
     RadioButton scSearch, spSearch;
@@ -61,11 +62,17 @@ public class search extends Activity {
 
         // Enables back button on top nav bar
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        ImageView backButton = (ImageView) findViewById(R.id.bBack);
+        final LayoutInflater factory = getLayoutInflater();
+        final View topLayout = factory.inflate(R.layout.lobby_top, null);
+        ImageView backButton = (ImageView) topLayout.findViewById(R.id.bBack);
+
+
+
         backButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), lobby.class);
-                startActivity(i);
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Enter a song", Toast.LENGTH_SHORT).show();
+
             }
         });
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,7 +82,7 @@ public class search extends Activity {
 
         // When user presses return key on keyboard, search function runs
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        EditText xxx = (EditText) search.this.findViewById(R.id.search_input);
+        EditText xxx = (EditText) v_search.this.findViewById(R.id.search_input);
         xxx.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -186,8 +193,8 @@ public class search extends Activity {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     protected void hideKeyboard() {
 
-        InputMethodManager inputMethodManager = (InputMethodManager) search.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        View view = search.this.getCurrentFocus();
+        InputMethodManager inputMethodManager = (InputMethodManager) v_search.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View view = v_search.this.getCurrentFocus();
         if (view == null) {
             if (inputMethodManager.isAcceptingText())
                 inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
@@ -220,8 +227,11 @@ public class search extends Activity {
         }
 
 
-        EditText searchText = search.this.findViewById(R.id.search_input);
+        EditText searchText = v_search.this.findViewById(R.id.search_input);
         term = searchText.getText().toString();
+
+        if(!term.equals("")) {
+
 
 
         try {
@@ -240,7 +250,10 @@ public class search extends Activity {
 
             }
         });
+        } else {
+            Toast.makeText(getApplicationContext(), "Enter a song", Toast.LENGTH_SHORT).show();
 
+        }
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

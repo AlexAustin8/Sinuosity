@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".search"
+        <activity android:name=".v_home"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,8 +21,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".lobby" />
-        <activity android:name=".home" />
+        <activity
+            android:name="com.spotify.sdk.android.authentication.LoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".v_lobby" />
+        <activity android:name=".v_search" />
+        <activity android:name=".lobby_streamHidden" />
+        <activity android:name=".CreateLobbyActivity" />
+        <activity android:name=".v_lobby_noStream" />
+        <activity android:name=".v_viewQueue"></activity>
 
     </application>
 

@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class lobby extends Activity {
+public class v_lobby extends Activity {
     public Button bViewQueue, bAddSong;
 
     @Override
@@ -48,7 +48,7 @@ public class lobby extends Activity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), home.class);
+                Intent i = new Intent(getApplicationContext(), v_home.class);
                 startActivity(i);
             }
         });
@@ -57,7 +57,7 @@ public class lobby extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), search.class);
+                Intent i = new Intent(getApplicationContext(), v_search.class);
                 startActivity(i);
             }
         });
@@ -65,7 +65,7 @@ public class lobby extends Activity {
         viewQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(lobby.this, "Hello", Toast.LENGTH_LONG).show();
+                Toast.makeText(v_lobby.this, "Hello", Toast.LENGTH_LONG).show();
             }
         });
 

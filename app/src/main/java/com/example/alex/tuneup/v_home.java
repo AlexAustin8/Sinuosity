@@ -13,9 +13,8 @@ package com.example.alex.tuneup;
         import android.view.WindowManager;
         import android.widget.Button;
         import android.widget.EditText;
-        import android.widget.Toast;
 
-public class home extends Activity {
+public class v_home extends Activity {
     public Button create, submit;
     public EditText entry;
     @Override
@@ -49,7 +48,7 @@ public class home extends Activity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), lobby.class);
+                Intent i = new Intent(getApplicationContext(), v_lobby.class);
                 startActivity(i);
 
             }

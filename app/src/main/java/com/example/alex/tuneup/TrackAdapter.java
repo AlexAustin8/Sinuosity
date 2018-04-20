@@ -1,4 +1,3 @@
-
 package com.example.alex.tuneup;
 
 import android.content.Context;
@@ -66,13 +65,10 @@ public class TrackAdapter extends BaseAdapter{
             title = URLDecoder.decode(title, "UTF-8");
             String artist = j.getString("artist");
             artist = URLDecoder.decode(artist, "UTF-8");
-
             titleView.setText(title);
             artistView.setText(artist);
-            String urlString = URLDecoder.decode(j.getString("artwork_url"), "UTF-8");
-            Bitmap img = new GetAlbumArt().execute(urlString).get();
+            Bitmap img = new GetAlbumArt().execute(j.getString("artwork_url")).get();
             albumartView.setImageBitmap(img);
-
         }catch (Exception e){
             Log.i("JSON Error", e.getMessage());
 
