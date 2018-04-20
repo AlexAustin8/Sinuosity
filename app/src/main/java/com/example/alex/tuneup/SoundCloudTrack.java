@@ -13,8 +13,7 @@ import org.json.JSONObject;
  * Created by alex on 3/31/18.
  */
 
-//THIS IS A TEST COMMENT
-// This is a test comment #2
+// sup alex
 
 public class SoundCloudTrack implements Track {
     private String uri, title, artist, album, artUri;
