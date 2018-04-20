@@ -14,6 +14,7 @@ import org.json.JSONObject;
  */
 
 //THIS IS A TEST COMMENT
+// This is a test comment #2
 
 public class SoundCloudTrack implements Track {
     private String uri, title, artist, album, artUri;
