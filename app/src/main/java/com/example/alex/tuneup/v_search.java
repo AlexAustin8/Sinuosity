@@ -235,14 +235,16 @@ public class v_search extends Activity {
 
 
         try {
-            Async_Search asynccc = new Async_Search(context);
 
-            adapter = asynccc.execute("https://jailbreakme.ml/sinc/search/" + type + ".php", term).get();
+
+            RequestManager rm = new RequestManager();
+            rm.request_search(type,term);
+            adapter = rm.get_searchAdapter(getApplicationContext());
+
+
         } catch (Exception e) {
             Log.i("[+] Search Error", e.getMessage());
         }
-
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
