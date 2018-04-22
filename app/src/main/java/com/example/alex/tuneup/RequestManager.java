@@ -14,24 +14,34 @@ import java.util.ArrayList;
 
 public class RequestManager {
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 
-    public SendRequest async = new SendRequest();
+    // --------------------------------------------------------------------------------------
+    private String serverAddress = "https://jailbreakme.ml/sinc/";
 
+    private String displayName;
 
+    private String lobbyID;
     private String lobbyName;
     private JSONArray lobbyMembers;
     private JSONArray lobbyPlaying;
     private JSONArray lobbyUpNext;
+    private Boolean lobbyExists = true;
 
     private ArrayList<JSONObject> queue  = new ArrayList<>();
     private ArrayList<JSONObject> searchResults = new ArrayList<>();
+    // --------------------------------------------------------------------------------------
 
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+    // Special methods
+    // =============================================================================================
+    // =============================================================================================
+    // v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
 
 
     private String pullSongValue(String index, JSONArray j) {
@@ -64,61 +74,97 @@ public class RequestManager {
         }
     }
 
-    public String get_lobbyName() {
-        return lobbyName;
+    // ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^
+    // =============================================================================================
+    // =============================================================================================
+
+
+
+
+
+
+
+
+
+
+
+    // Lobby
+    // =============================================================================================
+    // =============================================================================================
+    // v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
+
+    public void net_lobbyCreate(String lobbyName, String userID) {
+        try {
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "lobby/create.php", lobbyName, userID).get();
+        } catch(Exception e) {
+            Log.i("err", e.getMessage());
+
+        }
     }
 
-    public JSONArray get_lobbyMembers() {
-        return lobbyMembers;
+    // --------------------------------------------------------------------------------------
+
+    public void net_lobbyJoin(String lobbyID, String userID) {
+        try {
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "lobby/join.php", lobbyID, userID).get();
+        } catch(Exception e) {
+            Log.i("err", e.getMessage());
+
+        }
     }
 
-    public String get_lobbyMembersCount() {
-        return Integer.toString(lobbyMembers.length());
-    }
+    // --------------------------------------------------------------------------------------
 
-
-    public String get_lobbyUpPlaying(String index) {
-        return pullSongValue(index, lobbyPlaying);
-    }
-
-    public String get_lobbyUpNext(String index) {
-        return pullSongValue(index, lobbyUpNext);
-    }
-
-    public ArrayList<JSONObject> get_Queue() {
-        return queue;
-    }
-
-    public ArrayList<JSONObject> get_SearchResults() {
-        return searchResults;
-    }
-
-    public TrackAdapter get_searchAdapter(Context context) {
-        TrackAdapter adapter;
-        adapter = new TrackAdapter(context, searchResults);
-        return adapter;
-    }
-
-
-
-
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-    public void request_lobby(String lobbyID) {
+    public void net_lobbyLeave(String lobbyID, String userID) {
 
         try {
-            String response = async.execute("https://jailbreakme.ml/sinc/get_lobby.php", lobbyID).get();
-            JSONArray jsonArray;
-            jsonArray = new JSONArray(response);
-            JSONObject responseObj = jsonArray.getJSONObject(0);
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "lobby/leave.php", lobbyID, userID).get();
+        } catch(Exception e) {
+            Log.i("err", e.getMessage());
 
-            lobbyName = responseObj.getString("name");
-            lobbyMembers = responseObj.getJSONArray("members");
-            lobbyUpNext = responseObj.getJSONArray("upNext");
-            lobbyPlaying = responseObj.getJSONArray("playing");
+        }
+
+    }
+
+    // --------------------------------------------------------------------------------------
+
+    public String net_isInLobby(String lobbyID, String userID) {
+        String returnData;
+        try {
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "lobby/inLobby.php", lobbyID, userID).get();
+            returnData = response;
+        } catch(Exception e) {
+            Log.i("err", e.getMessage());
+            returnData = "error";
+        }
+        return returnData;
+    }
+
+    // --------------------------------------------------------------------------------------
+
+    public void net_lobbyGetData(String lobbyID) {
+
+        try {
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "lobby/getData.php", lobbyID).get();
+            if(response.equals("Error")) {
+                lobbyExists = false;
+            } else {
+                lobbyExists = true;
+                JSONArray jsonArray;
+                jsonArray = new JSONArray(response);
+                JSONObject responseObj = jsonArray.getJSONObject(0);
+
+                lobbyName = responseObj.getString("name");
+                lobbyMembers = responseObj.getJSONArray("members");
+                lobbyUpNext = responseObj.getJSONArray("upNext");
+                lobbyPlaying = responseObj.getJSONArray("playing");
+            }
+
 
         } catch(Exception e) {
             Log.i("err", e.getMessage());
@@ -128,10 +174,50 @@ public class RequestManager {
 
     }
 
-    public void request_search(String type, String term) {
+    // --------------------------------------------------------------------------------------
+
+    public String loc_lobbyPlaying(String index) {
+        return pullSongValue(index, lobbyPlaying);
+    }
+
+    public String loc_lobbyUpNext(String index) {
+        return pullSongValue(index, lobbyUpNext);
+    }
+
+    public String loc_lobbyName() {
+        return lobbyName;
+    }
+
+    public JSONArray loc_lobbyMembers() {
+        return lobbyMembers;
+    }
+
+    public String loc_lobbyMembersCount() {
+        return Integer.toString(lobbyMembers.length());
+    }
+
+    public Boolean loc_lobbyCheckExists() { return lobbyExists; }
+
+
+    // ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^
+    // =============================================================================================
+    // =============================================================================================
+
+
+
+
+
+
+    // Search
+    // =============================================================================================
+    // =============================================================================================
+    // v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
+
+    public void net_searchGetData(String type, String term) {
         searchResults.clear();
         try {
-            String response = async.execute("https://jailbreakme.ml/sinc/search/" + type + ".php", term).get();
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "search/" + type + ".php", term).get();
 
             JSONArray jsonArray;
 
@@ -145,14 +231,133 @@ public class RequestManager {
                     }
 
                 } catch(Exception e){
-                    Log.i("Json Error 1", e.getMessage());
+                    Log.i("Json Error", e.getMessage());
                 }
 
     }
 
+    // --------------------------------------------------------------------------------------
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public TrackAdapter loc_searchAdapter(Context context) {
+        TrackAdapter adapter;
+        adapter = new TrackAdapter(context, searchResults);
+        return adapter;
+    }
+
+
+    // ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^
+    // =============================================================================================
+    // =============================================================================================
+
+
+
+
+
+
+
+
+
+    // Queue
+    // =============================================================================================
+    // =============================================================================================
+    // v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
+
+    public void net_queueGetData(String lobbyID) {
+
+        queue.clear();
+        try {
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "/queue/getData.php", lobbyID).get();
+
+            JSONArray jsonArray;
+
+
+            jsonArray = new JSONArray(response);
+            for (int i = 0; i < jsonArray.length() ; i++) {
+
+                JSONObject track = jsonArray.getJSONObject(i);
+                queue.add(track);
+
+            }
+
+        } catch(Exception e){
+            Log.i("Json Error", e.getMessage());
+        }
+
+    }
+
+    // --------------------------------------------------------------------------------------
+
+    public TrackAdapter loc_queueAdapter(Context context) {
+        TrackAdapter adapter;
+        adapter = new TrackAdapter(context, queue);
+        return adapter;
+    }
+
+    // --------------------------------------------------------------------------------------
+
+    public void net_queueAddSong(String userID, String lobbyID, String URI, String name, String artist, String duration, String artwork, String source) {
+
+        try {
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "/queue/addSong.php", userID, lobbyID, URI, name, artist, duration, artwork, source).get();
+        } catch(Exception e) {
+            Log.i("err", e.getMessage());
+
+        }
+
+    }
+
+    public void net_voteSong(Boolean upvote, String lobbyID, String songID) {
+
+        String boolString = String.valueOf(upvote);
+
+        try {
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "/queue/voteSong.php", boolString, lobbyID, songID).get();
+        } catch(Exception e) {
+            Log.i("err", e.getMessage());
+
+        }
+
+    }
+
+    public ArrayList<JSONObject> loc_Queue() {
+        return queue;
+    }
+
+    // ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^
+    // =============================================================================================
+    // =============================================================================================
+
+
+
+
+
+    // Settings
+    // =============================================================================================
+    // =============================================================================================
+    // v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
+
+
+    public void net_settingsChangeName(String userID, String newName) {
+        try {
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "user/changeName.php", userID, newName).get();
+        } catch(Exception e) {
+            Log.i("err", e.getMessage());
+
+        }
+    }
+
+
+    // ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^
+    // =============================================================================================
+    // =============================================================================================
+
+
+
 
 
 

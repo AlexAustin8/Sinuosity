@@ -59,13 +59,15 @@ public class v_home extends Activity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String searchTerm = entry.getText().toString();
+                String lobbyID = entry.getText().toString();
                 //TODO: Switch this with what ever the proper method to search server for activity is, using async_search for now
-                Async_Search a = new Async_Search(getApplicationContext());
-                int result = a.execute(url, searchTerm);       //Just to go with the 0/1 thing mentioned on slack
-                if(result == 0){
+
+                RequestManager rManger = new RequestManager();
+                rManger.net_lobbyGetData(lobbyID);
+
+                if(rManger.loc_lobbyCheckExists()){
                     Intent i = new Intent(getApplicationContext(), v_lobby.class);
-                    i.putExtra("lobbyKey", searchTerm);
+                    i.putExtra("lobbyKey", lobbyID);
                     startActivity(i);
                 }else{
                     Toast.makeText(getApplicationContext(), "Lobby Not Found, Please Try Another Search", Toast.LENGTH_LONG).show();

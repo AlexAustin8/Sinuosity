@@ -238,8 +238,8 @@ public class v_search extends Activity {
 
 
             RequestManager rm = new RequestManager();
-            rm.request_search(type,term);
-            adapter = rm.get_searchAdapter(getApplicationContext());
+            rm.net_searchGetData(type,term);
+            adapter = rm.loc_searchAdapter(getApplicationContext());
 
 
         } catch (Exception e) {
