@@ -4,6 +4,10 @@
     <string name="search_hint">Enter Search Here</string>
     <string name="spotify_search_hint">Spotify</string>
     <string name="soundcloud_search_hint">Soundcloud</string>
+    <string name="resume">RESUME</string>
+    <string name="pause">PAUSE</string>
+
+
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>

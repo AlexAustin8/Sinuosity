@@ -38,13 +38,13 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
     }
 
 
-    public SpotifyTrack(JSONObject j, Config c){
+    public SpotifyTrack(String key, Config c){
         try {
-            //Subject to change, precise JSON values are TBD
-            uri = j.getString("uri");
-            title = j.getString("title");
-            artist = j.getString("artist");
-            album = j.getString("album");
+            RequestManager r = new RequestManager();
+            r.web_lobbyGetData(key);
+            uri = r.loc_lobbyPlaying("uri");
+            title = r.loc_lobbyPlaying("name");
+            artist = r.loc_lobbyPlaying("artist");
         }catch(Exception e){
             //Later on, implement this in an error message to user.
             Log.i("Error", e.getMessage());

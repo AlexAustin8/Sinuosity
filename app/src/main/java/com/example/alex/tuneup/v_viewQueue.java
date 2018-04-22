@@ -20,9 +20,9 @@ public class v_viewQueue extends AppCompatActivity {
         setContentView(R.layout.activity_view_queue);
         queue = findViewById(R.id.result_list);  //Once again a placeholder until proper UI id is defined
         key = getIntent().getExtras().getString("lobbyKey");
-        //TODO: Create an Async Task that sends sends a request to the server with the key for current lobby and returns an ArrayList<JSONobject>
-        ArrayList<JSONObject> q = new ArrayList<>();
-        TrackAdapter adapter = new TrackAdapter(getApplicationContext(), q);
+        RequestManager r = new RequestManager();
+        r.web_queueGetData(key);
+        TrackAdapter adapter = r.loc_queueAdapter(getApplicationContext());
         queue.setAdapter(adapter);
     }
 

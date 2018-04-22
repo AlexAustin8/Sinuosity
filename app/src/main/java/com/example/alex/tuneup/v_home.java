@@ -60,12 +60,11 @@ public class v_home extends Activity {
             @Override
             public void onClick(View v) {
                 String lobbyID = entry.getText().toString();
-                //TODO: Switch this with what ever the proper method to search server for activity is, using async_search for now
-
+                String userName = "test";  //Using a dummy username for now, until we have proper entry fields
                 RequestManager rManger = new RequestManager();
                 rManger.web_lobbyGetData(lobbyID);
-
                 if(rManger.loc_lobbyCheckExists()){
+                    rManger.web_lobbyJoin(lobbyID, userName);
                     Intent i = new Intent(getApplicationContext(), v_lobby.class);
                     i.putExtra("lobbyKey", lobbyID);
                     startActivity(i);

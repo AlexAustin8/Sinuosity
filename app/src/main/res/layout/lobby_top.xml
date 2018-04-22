@@ -71,7 +71,7 @@
             android:background="@drawable/drop_shadow"/>
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/play_button"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:background="@drawable/pause_button"
@@ -83,7 +83,7 @@
             android:padding="2dp"/>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/song_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -120,7 +120,7 @@
 
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/time_passed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -130,7 +130,7 @@
                     android:alpha=".7"/>
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/time_remaining"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -158,7 +158,7 @@
         >
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/lobby_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -171,7 +171,7 @@
             android:letterSpacing=".1"/>
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/num_members"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

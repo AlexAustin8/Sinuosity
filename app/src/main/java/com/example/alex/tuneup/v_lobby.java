@@ -3,6 +3,7 @@
 
 package com.example.alex.tuneup;
 
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -21,16 +22,15 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
 public class v_lobby extends Activity {
-    public Button bViewQueue, bAddSong;
     private String url = "https://thisisjustaplaceholderuntilwegetproperurl.gov", name;  //Replace with proper URL to connect with the server
     private ImageView albumCover;
-    private TextView songInfo;
-    private String key, trackInfo;
+    private TextView songInfo, lobbyName;
+    private String key, trackInfo, numMembers;
     private JSONObject currentTrack, nextTrack;    //This lobby will not stream, therefore, we only need to have the JSON object of the current track
-    private HashMap<String, Object> lobbyData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,17 +62,19 @@ public class v_lobby extends Activity {
         ImageView backButton = (ImageView) findViewById(R.id.bBack);
 
         albumCover = findViewById(R.id.imageView);
-        Async_Search a = new Async_Search(getApplicationContext());
+        songInfo = findViewById(R.id.song_info);
+        lobbyName = findViewById(R.id.lobby_name);
+        RequestManager r = new RequestManager();
         try {
-            lobbyData = a.execute(url, key).get();    //Can be changed to proper async task once its there
-            currentTrack = (JSONObject) lobbyData.get("currentTrack");
-            trackInfo = currentTrack.getString("title") + " - " + currentTrack.getString("artist");
-            trackInfo = URLDecoder.decode(trackInfo, "UTF-8");
+            r.web_lobbyGetData(key);
+            name = r.loc_lobbyName();
+            lobbyName.setText(URLDecoder.decode(name, "UTF-8"));
+            trackInfo = URLDecoder.decode((r.loc_lobbyPlaying("name") + " - " + r.loc_lobbyPlaying("artist")) , "UTF-8");
             songInfo.setText(trackInfo);
-            Bitmap img = new GetAlbumArt().execute(currentTrack.getString("artwork_url")).get();
+            Bitmap img = new GetAlbumArt().execute(r.loc_lobbyPlaying("artwork")).get();
             albumCover.setImageBitmap(img);
-            nextTrack = (JSONObject) lobbyData.get("nextTrack");
-            name = (String) lobbyData.get(name);
+            numMembers = r.loc_lobbyMembersCount();
+
         }catch(Exception e){
             Log.i("Error loading lobby" , e.getMessage());
             Toast.makeText(v_lobby.this, "Error Loading Lobby Data", Toast.LENGTH_LONG).show();
