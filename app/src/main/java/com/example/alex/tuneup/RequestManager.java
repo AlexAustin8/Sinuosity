@@ -38,6 +38,12 @@ public class RequestManager {
 
 
 
+
+
+
+
+
+
     // Special methods
     // =============================================================================================
     // =============================================================================================
@@ -88,12 +94,13 @@ public class RequestManager {
 
 
 
+
     // Lobby
     // =============================================================================================
     // =============================================================================================
     // v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
 
-    public void net_lobbyCreate(String lobbyName, String userID) {
+    public void web_lobbyCreate(String lobbyName, String userID) {
         try {
             SendRequest async = new SendRequest();
             String response = async.execute(serverAddress + "lobby/create.php", lobbyName, userID).get();
@@ -105,7 +112,7 @@ public class RequestManager {
 
     // --------------------------------------------------------------------------------------
 
-    public void net_lobbyJoin(String lobbyID, String userID) {
+    public void web_lobbyJoin(String lobbyID, String userID) {
         try {
             SendRequest async = new SendRequest();
             String response = async.execute(serverAddress + "lobby/join.php", lobbyID, userID).get();
@@ -117,7 +124,7 @@ public class RequestManager {
 
     // --------------------------------------------------------------------------------------
 
-    public void net_lobbyLeave(String lobbyID, String userID) {
+    public void web_lobbyLeave(String lobbyID, String userID) {
 
         try {
             SendRequest async = new SendRequest();
@@ -131,7 +138,7 @@ public class RequestManager {
 
     // --------------------------------------------------------------------------------------
 
-    public String net_isInLobby(String lobbyID, String userID) {
+    public String web_isInLobby(String lobbyID, String userID) {
         String returnData;
         try {
             SendRequest async = new SendRequest();
@@ -146,7 +153,7 @@ public class RequestManager {
 
     // --------------------------------------------------------------------------------------
 
-    public void net_lobbyGetData(String lobbyID) {
+    public void web_lobbyGetData(String lobbyID) {
 
         try {
             SendRequest async = new SendRequest();
@@ -208,12 +215,18 @@ public class RequestManager {
 
 
 
+
+
+
+
+
+
     // Search
     // =============================================================================================
     // =============================================================================================
     // v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
 
-    public void net_searchGetData(String type, String term) {
+    public void web_searchGetData(String type, String term) {
         searchResults.clear();
         try {
             SendRequest async = new SendRequest();
@@ -258,12 +271,15 @@ public class RequestManager {
 
 
 
+
+
+
     // Queue
     // =============================================================================================
     // =============================================================================================
     // v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
 
-    public void net_queueGetData(String lobbyID) {
+    public void web_queueGetData(String lobbyID) {
 
         queue.clear();
         try {
@@ -297,7 +313,7 @@ public class RequestManager {
 
     // --------------------------------------------------------------------------------------
 
-    public void net_queueAddSong(String userID, String lobbyID, String URI, String name, String artist, String duration, String artwork, String source) {
+    public void web_queueAddSong(String userID, String lobbyID, String URI, String name, String artist, String duration, String artwork, String source) {
 
         try {
             SendRequest async = new SendRequest();
@@ -309,7 +325,7 @@ public class RequestManager {
 
     }
 
-    public void net_voteSong(Boolean upvote, String lobbyID, String songID) {
+    public void web_voteSong(Boolean upvote, String lobbyID, String songID) {
 
         String boolString = String.valueOf(upvote);
 
@@ -335,16 +351,23 @@ public class RequestManager {
 
 
 
+
+
+
+
+
+
+
     // Settings
     // =============================================================================================
     // =============================================================================================
     // v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
 
 
-    public void net_settingsChangeName(String userID, String newName) {
+    public void web_settingsChangeName(String userID, String newName) {
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "user/changeName.php", userID, newName).get();
+            String response = async.execute(serverAddress + "settings/changeName.php", userID, newName).get();
         } catch(Exception e) {
             Log.i("err", e.getMessage());
 

@@ -238,7 +238,7 @@ public class v_search extends Activity {
 
 
             RequestManager rm = new RequestManager();
-            rm.net_searchGetData(type,term);
+            rm.web_searchGetData(type,term);
             adapter = rm.loc_searchAdapter(getApplicationContext());
 
 

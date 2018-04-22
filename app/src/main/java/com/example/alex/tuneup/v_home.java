@@ -63,7 +63,7 @@ public class v_home extends Activity {
                 //TODO: Switch this with what ever the proper method to search server for activity is, using async_search for now
 
                 RequestManager rManger = new RequestManager();
-                rManger.net_lobbyGetData(lobbyID);
+                rManger.web_lobbyGetData(lobbyID);
 
                 if(rManger.loc_lobbyCheckExists()){
                     Intent i = new Intent(getApplicationContext(), v_lobby.class);
