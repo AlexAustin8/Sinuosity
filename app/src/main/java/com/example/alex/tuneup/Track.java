@@ -33,6 +33,7 @@ how soundcloud tracks will be implemented
     //other methods
     void resume();
     boolean isPlaying();
+    boolean isStreamFinished();
     void pause();
     void skip();
     void kickFromQueue();

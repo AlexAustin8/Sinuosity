@@ -24,7 +24,7 @@ public class SoundCloudTrack implements Track {
     private final String source = "sc";
 
     private MediaPlayer mPlayer = null;
-    boolean playing = false;
+    boolean playing = false, streamFinished = false;
 
     //Parameterless constructor to use for testing purposes
     public SoundCloudTrack(){
@@ -93,6 +93,11 @@ public class SoundCloudTrack implements Track {
     }
 
     @Override
+    public boolean isStreamFinished(){
+        return streamFinished;
+    }
+
+    @Override
     public void setArtist(String newArtist) {
         artist = newArtist;
 
@@ -109,6 +114,7 @@ public class SoundCloudTrack implements Track {
 
     }
 
+
     private void initializePlayer() {
         mPlayer = new MediaPlayer();
         try {
@@ -120,6 +126,14 @@ public class SoundCloudTrack implements Track {
                 }
             });
             mPlayer.setDataSource(prefix + uri + postfix);
+            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    streamFinished = true;
+                    mPlayer.stop();
+                    mPlayer.release();
+                }
+            });
             mPlayer.prepare();
         }catch(Exception e ){
             if(e.getMessage() != null) {

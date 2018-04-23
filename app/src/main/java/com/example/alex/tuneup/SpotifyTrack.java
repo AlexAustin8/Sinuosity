@@ -25,7 +25,7 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
     private String uri, title, artist, album, artUri;
     private final String source = "sp";
     private Player mPlayer = null;
-    boolean playing = false;
+    boolean playing = false, streamFinished = false;
 
     //Parameterless constructor for testing purposes
     public SpotifyTrack(Config c){
@@ -124,8 +124,11 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
     public void resume() {
         mPlayer.resume(null);
         playing = true;
+    }
 
-
+    @Override
+    public boolean isStreamFinished(){
+        return streamFinished;
     }
 
     @Override
@@ -172,6 +175,10 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
     @Override
     public void onPlaybackEvent(PlayerEvent playerEvent) {
         Log.i("PlaybackEvent", playerEvent.name());
+        if(playerEvent == PlayerEvent.kSpPlaybackNotifyAudioDeliveryDone){
+            streamFinished = true;
+            mPlayer.destroy();
+        }
 
     }
 

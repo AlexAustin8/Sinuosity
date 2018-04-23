@@ -3,6 +3,7 @@ package com.example.alex.tuneup;
 import android.content.Intent;
 
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +27,7 @@ import org.json.JSONObject;
 import java.net.URLDecoder;
 
 
-public class lobby_streamHidden extends AppCompatActivity  {
+public class lobby_streamHidden extends AppCompatActivity {
     private static final String CLIENT_ID = "cf7eda43f4ab43e59c74091e4259d9b2";
     private static final String REDIRECT_URI = "tuneup-log://callback";
     private static final int REQUEST_CODE = 1337;
@@ -35,9 +36,11 @@ public class lobby_streamHidden extends AppCompatActivity  {
     private ImageView albumCover;
     private TextView songInfo, lobbyName;
     private Config playerConfig;
+    private Button searchButton, viewQueue, playButton;
+    private ImageView backButton;
     private String key, trackInfo, numMembers;
     private Track currentTrack;
-    private JSONObject nextTrack;    //This lobby will not stream, therefore, we only need to have the JSON object of the current track
+    private RequestManager r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,81 +67,123 @@ public class lobby_streamHidden extends AppCompatActivity  {
         final LayoutInflater factory = getLayoutInflater();
         final View topLayout = factory.inflate(R.layout.lobby_top, null);
 
-        Button searchButton = (Button) findViewById(R.id.bAddSong);
-        Button viewQueue = (Button) findViewById(R.id.bViewQueue);
-        final Button playButton= (Button) findViewById(R.id.play_button);
-        ImageView backButton = (ImageView) findViewById(R.id.bBack);
 
+        searchButton = findViewById(R.id.bAddSong);
+        viewQueue = findViewById(R.id.bViewQueue);
+        playButton = findViewById(R.id.play_button);
+        backButton = findViewById(R.id.bBack);
         albumCover = findViewById(R.id.imageView);
         songInfo = findViewById(R.id.song_info);
         lobbyName = findViewById(R.id.lobby_name);
-        RequestManager r = new RequestManager();
+        //End UI Assignment
+
+        //Declare Request Manager to use within the rest of the activity
+        r = new RequestManager();
+
+
+        //Declare Thread that determines when to change track
+        Thread streamCompletionCheck = new Thread("Stream Check") {
+            public void run() {
+                while (!currentTrack.isStreamFinished()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        Log.i("Thread Error", e.getMessage());
+                    }
+                }
+                r.web_queueShift();
+            }
+        };
+
+
+        //Initial Lobby creation for whatever the current song is when lobby is first joined by user
+        populateLobby();
+
+        //Declare listeners for all Buttons
+        backButton.setOnClickListener(buttonListener);
+        playButton.setOnClickListener(buttonListener);
+        searchButton.setOnClickListener(buttonListener);
+        viewQueue.setOnClickListener(buttonListener);
+
+        while (true) {
+            try {
+                streamCompletionCheck.start();
+                streamCompletionCheck.join();
+                populateLobby();
+            } catch (Exception e) {
+                Log.i("Thread Error", e.getMessage());
+            }
+        }
+    }
+
+
+
+
+
+    protected void populateLobby() {
         try {
             r.web_lobbyGetData(key);
-            if(r.loc_lobbyPlaying("source").compareTo("Soundcloud") == 0){
+            if (r.loc_lobbyPlaying("source").compareTo("Soundcloud") == 0) {
                 currentTrack = new SoundCloudTrack(key);
-            }else{
+            } else {
                 currentTrack = new SpotifyTrack(key, playerConfig);
             }
-
             //Populate data, this maybe could use some refactoring, since we are declaring a track object that can hold some of these values
             name = r.loc_lobbyName();
             lobbyName.setText(URLDecoder.decode(name, "UTF-8"));
-            trackInfo = URLDecoder.decode((r.loc_lobbyPlaying("name") + " - " + r.loc_lobbyPlaying("artist")) , "UTF-8");
+            trackInfo = URLDecoder.decode((r.loc_lobbyPlaying("name") + " - " + r.loc_lobbyPlaying("artist")), "UTF-8");
             songInfo.setText(trackInfo);
             Bitmap img = new GetAlbumArt().execute(r.loc_lobbyPlaying("artwork")).get();
             albumCover.setImageBitmap(img);
             numMembers = r.loc_lobbyMembersCount();
-        }catch(Exception e){
-            Log.i("Error loading lobby" , e.getMessage());
+        } catch (Exception e) {
+            Log.i("Error loading lobby", e.getMessage());
             Toast.makeText(lobby_streamHidden.this, "Error Loading Lobby Data", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    View.OnClickListener buttonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent i;
+            switch (v.getId()) {
+                case R.id.bAddSong:
+                    i = new Intent(getApplicationContext(), v_search.class);
+                    i.putExtra("lobbyKey", key);
+                    startActivity(i);
+                    break;
+
+                case R.id.bViewQueue:
+                    // Toast.makeText(lobby_streamHidden.this, "Hello", Toast.LENGTH_LONG).show();
+                    i = new Intent(getApplicationContext(), v_viewQueue.class);
+                    i.putExtra("lobbyKey", key);
+                    startActivity(i);
+                    break;
+
+                case R.id.play_button:
+                    if (currentTrack.isPlaying()) {
+                        currentTrack.pause();
+                        playButton.setText(getResources().getString(R.string.resume));
+                    } else if (!currentTrack.isPlaying()) {
+                        currentTrack.resume();
+                        playButton.setText(getResources().getString(R.string.pause));
+                    }
+                    break;
+
+                case R.id.bBack:
+                    i = new Intent(getApplicationContext(), v_home.class);
+                    i.putExtra("lobbyKey", key);
+                    startActivity(i);
+                    break;
+            }
+
         }
 
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), v_home.class);
-                startActivity(i);
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              if(currentTrack.isPlaying()){
-                  currentTrack.pause();
-                  playButton.setText(getResources().getString(R.string.resume));
-              }else if(!currentTrack.isPlaying()){
-                  currentTrack.resume();
-                  playButton.setText(getResources().getString(R.string.pause));
-              }
-              }
-        });
-
-
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), v_search.class);
-                startActivity(i);
-            }
-        });
-
-        viewQueue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(lobby_streamHidden.this, "Hello", Toast.LENGTH_LONG).show();
-                Intent i = new Intent(getApplicationContext(), v_search.class);
-                startActivity(i);
-            }
-        });
-
-    }
+    };
 
 
     @Override
-    //Get us the result from the Spotify Login Activity to create spotify track
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         // Check if result comes from the correct activity
