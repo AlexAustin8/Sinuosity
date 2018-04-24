@@ -25,8 +25,7 @@ public class v_home extends Activity {
 
         // Hides status and title bar --------------------------------------
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // -----------------------------------------------------------------
 
         setContentView(R.layout.home);
@@ -50,7 +49,7 @@ public class v_home extends Activity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), CreateLobbyActivity.class);
+                Intent i = new Intent(getApplicationContext(), v_CreateLobby.class);
                 startActivity(i);
             }
         });

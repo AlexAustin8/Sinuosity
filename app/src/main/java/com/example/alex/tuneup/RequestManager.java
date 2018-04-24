@@ -100,14 +100,18 @@ public class RequestManager {
     // =============================================================================================
     // v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v
 
-    public void web_lobbyCreate(String lobbyName, String userID) {
+    public String web_lobbyCreate(String lobbyName, String userID) {
+        String response = "";
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "lobby/create.php", lobbyName, userID).get();
+            response = async.execute(serverAddress + "lobby/create.php", "lobbyName", lobbyName, "userID", userID).get();
+
+
         } catch(Exception e) {
             Log.i("err", e.getMessage());
 
         }
+        return response;
     }
 
     // --------------------------------------------------------------------------------------
@@ -115,7 +119,7 @@ public class RequestManager {
     public void web_lobbyJoin(String lobbyID, String userID) {
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "lobby/join.php", lobbyID, userID).get();
+            String response = async.execute(serverAddress + "lobby/join.php", "lobbyID", lobbyID, "userID", userID).get();
         } catch(Exception e) {
             Log.i("err", e.getMessage());
 
@@ -128,7 +132,7 @@ public class RequestManager {
 
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "lobby/leave.php", lobbyID, userID).get();
+            String response = async.execute(serverAddress + "lobby/leave.php", "lobbyID", lobbyID, "userID", userID).get();
         } catch(Exception e) {
             Log.i("err", e.getMessage());
 
@@ -138,17 +142,17 @@ public class RequestManager {
 
     // --------------------------------------------------------------------------------------
 
-    public String web_isInLobby(String lobbyID, String userID) {
-        String returnData;
+    public String web_isInLobby(String userID) {
+        String response = "";
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "lobby/inLobby.php", lobbyID, userID).get();
-            returnData = response;
+            response = async.execute(serverAddress + "lobby/inLobby.php", "userID", userID).get();
+
         } catch(Exception e) {
             Log.i("err", e.getMessage());
-            returnData = "error";
+
         }
-        return returnData;
+        return response;
     }
 
     // --------------------------------------------------------------------------------------
@@ -157,7 +161,7 @@ public class RequestManager {
 
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "lobby/getData.php", lobbyID).get();
+            String response = async.execute(serverAddress + "lobby/getData.php", "lobbyID", lobbyID).get();
             if(response.equals("Error")) {
                 lobbyExists = false;
             } else {
@@ -230,7 +234,7 @@ public class RequestManager {
         searchResults.clear();
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "search/" + type + ".php", term).get();
+            String response = async.execute(serverAddress + "search/" + type + ".php", "query", term).get();
 
             JSONArray jsonArray;
 
@@ -284,7 +288,7 @@ public class RequestManager {
         queue.clear();
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "/queue/getData.php", lobbyID).get();
+            String response = async.execute(serverAddress + "/queue/getData.php","lobbyID", lobbyID).get();
 
             JSONArray jsonArray;
 
@@ -317,7 +321,7 @@ public class RequestManager {
 
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "/queue/addSong.php", userID, lobbyID, URI, name, artist, duration, artwork, source).get();
+            String response = async.execute(serverAddress + "/queue/addSong.php", "userID", userID, "lobbyID", lobbyID, "URI", URI, "name", name, "artist", artist, "duration", duration, "artwork", artwork, "src", source).get();
         } catch(Exception e) {
             Log.i("err", e.getMessage());
 
@@ -325,19 +329,39 @@ public class RequestManager {
 
     }
 
-    public void web_voteSong(Boolean upvote, String lobbyID, String songID) {
+    // --------------------------------------------------------------------------------------
+
+    public void web_queueShift(String lobbyID) {
+
+        try {
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "/queue/shift.php", "lobbyID", lobbyID).get();
+        } catch(Exception e) {
+            Log.i("err", e.getMessage());
+
+        }
+
+    }
+
+    // --------------------------------------------------------------------------------------
+
+    public void web_queueVoteSong(Boolean upvote, String lobbyID, String songID) {
 
         String boolString = String.valueOf(upvote);
 
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "/queue/voteSong.php", boolString, lobbyID, songID).get();
+            String response = async.execute(serverAddress + "/queue/voteSong.php", "upvote", boolString,"lobbyID", lobbyID,"songID", songID).get();
         } catch(Exception e) {
             Log.i("err", e.getMessage());
 
         }
 
     }
+
+    // --------------------------------------------------------------------------------------
+
+
 
     public ArrayList<JSONObject> loc_Queue() {
         return queue;
@@ -367,11 +391,24 @@ public class RequestManager {
     public void web_settingsChangeName(String userID, String newName) {
         try {
             SendRequest async = new SendRequest();
-            String response = async.execute(serverAddress + "settings/changeName.php", userID, newName).get();
+            String response = async.execute(serverAddress + "settings/changeName.php", "userID", userID, "newName", newName).get();
         } catch(Exception e) {
             Log.i("err", e.getMessage());
 
         }
+    }
+
+    public String web_settingsCreateUser(String displayName) {
+        String response = "";
+        try {
+            SendRequest async = new SendRequest();
+            response = async.execute(serverAddress + "settings/createUser.php", "displayName", displayName).get();
+
+        } catch(Exception e) {
+            Log.i("err", e.getMessage());
+
+        }
+        return response;
     }
 
 

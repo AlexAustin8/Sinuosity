@@ -43,8 +43,14 @@ public class SendRequest extends AsyncTask<String, Integer, String> {
 
             URL url = new URL(params[0]);
 
+
             JSONObject postDataParams = new JSONObject();
-            postDataParams.put("query", params[1]);
+
+            for(int i = 1; i < params.length; i += 2) {
+                postDataParams.put(params[i], URLEncoder.encode(params[i+1]));
+            }
+
+
 
             Log.e("params",postDataParams.toString());
 
@@ -69,11 +75,16 @@ public class SendRequest extends AsyncTask<String, Integer, String> {
             if (responseCode == HttpsURLConnection.HTTP_OK) {
 
                 BufferedReader in=new BufferedReader(
-                        new InputStreamReader(
-                                conn.getInputStream()));
+                        new InputStreamReader(conn.getInputStream()));
+
                 StringBuffer sb = new StringBuffer("");
                 String line="";
 
+                // Fixes weird server issue
+                in.readLine();
+                in.readLine();
+
+                // gets output
                 while((line = in.readLine()) != null) {
 
                     sb.append(line);
@@ -85,20 +96,7 @@ public class SendRequest extends AsyncTask<String, Integer, String> {
                 response = sb.toString();
 
 
-
-                try{
-
-
-
-
-                } catch(Exception e) {
-                    Log.i("Json Error", e.getMessage());
-                }
-
-
                 Log.i("Results:",response);
-
-
 
 
             }
@@ -106,8 +104,7 @@ public class SendRequest extends AsyncTask<String, Integer, String> {
                 Log.i("False Response Code: ", String.valueOf(responseCode));
                 return null;
             }
-        }
-        catch(Exception e){
+        } catch(Exception e){
             Log.i("Exception", e.getMessage());
             return null;
         }

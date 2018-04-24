@@ -91,7 +91,7 @@ public class lobby_streamHidden extends AppCompatActivity {
                         Log.i("Thread Error", e.getMessage());
                     }
                 }
-                r.web_queueShift();
+                r.web_queueShift(key);
             }
         };
 

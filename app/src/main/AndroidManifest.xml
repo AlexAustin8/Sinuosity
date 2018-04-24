@@ -27,9 +27,13 @@
         <activity android:name=".v_lobby" />
         <activity android:name=".v_search" />
         <activity android:name=".lobby_streamHidden" />
-        <activity android:name=".CreateLobbyActivity" />
+        <activity android:name=".v_CreateLobby"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+
+            />
         <activity android:name=".v_lobby_noStream" />
         <activity android:name=".v_viewQueue"></activity>
+
 
     </application>
 
