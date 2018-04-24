@@ -49,7 +49,7 @@ public class v_home extends Activity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), v_CreateLobby.class);
+                Intent i = new Intent(getApplicationContext(), v_create_lobby.class);
                 startActivity(i);
             }
         });

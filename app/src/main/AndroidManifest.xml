@@ -27,13 +27,13 @@
         <activity android:name=".v_lobby" />
         <activity android:name=".v_search" />
         <activity android:name=".lobby_streamHidden" />
-        <activity android:name=".v_CreateLobby"
+        <activity android:name=".v_create_lobby"
             android:theme="@style/Theme.AppCompat.NoActionBar"
 
             />
         <activity android:name=".v_lobby_noStream" />
         <activity android:name=".v_viewQueue"></activity>
-
+        <activity android:name=".v_first_open"></activity>
 
     </application>
 

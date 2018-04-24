@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-public class v_CreateLobby extends AppCompatActivity {
+public class v_create_lobby extends AppCompatActivity {
     private EditText nameInput;
     private Button select;
 
