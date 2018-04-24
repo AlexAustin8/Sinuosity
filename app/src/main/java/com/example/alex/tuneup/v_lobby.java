@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,8 @@ import org.json.JSONObject;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class v_lobby extends Activity {
     private String url = "https://thisisjustaplaceholderuntilwegetproperurl.gov", name;  //Replace with proper URL to connect with the server
@@ -32,6 +35,7 @@ public class v_lobby extends Activity {
     private String key, trackInfo, numMembers;
     private JSONObject currentTrack, nextTrack;    //This lobby will not stream, therefore, we only need to have the JSON object of the current track
     private RequestManager r;
+    private Timer t = new Timer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,14 @@ public class v_lobby extends Activity {
         RequestManager r = new RequestManager();
 
         populateLobby();
+
+        t.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                populateLobby();
+            }
+        }, 0, 600);
 
 
         //Declare listeners for all Buttons

@@ -29,7 +29,8 @@ public class CreateLobbyActivity extends AppCompatActivity {
             String name = nameInput.getText().toString(); //Name to be sent to server
             String id = "test"; //Using a dummy id for now
             RequestManager r = new RequestManager();
-            r.web_lobbyCreate(name, id);
+            //Although it does not yet, web_Create will return the lobby key, so afterwards the following line will be valid
+            code = r.web_lobbyCreate(name, id);
             String code = "123456";   //Just a sample until we figure out where the key will be generated
             Intent i = new Intent(getApplicationContext(), lobby_streamHidden.class);
             i.putExtra("lobbyKey", code);
