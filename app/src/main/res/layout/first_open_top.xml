@@ -18,18 +18,7 @@
         >
 
 
-        <ImageView
-            android:id="@+id/bBackCreate"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
 
-            android:layout_weight="1"
-            android:src="@drawable/back"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-
-            android:layout_marginLeft="10dp"
-            android:alpha=".7"/>
 
 
         <ImageView
@@ -56,8 +45,20 @@
         android:focusableInTouchMode="true"
         >
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-40px"
+            android:text="DISPLAY NAME"
+            android:textAlignment="center"
+
+            android:textColor="#ffffff"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
         <EditText
-            android:id="@+id/new_name_input"
+            android:id="@+id/new_display_name_input"
 
             android:layout_width="250dp"
             android:layout_height="wrap_content"
@@ -67,19 +68,19 @@
             android:ems="10"
             android:gravity="center"
             android:inputType="textPersonName"
-            android:hint="DISPLAY NAME"
+            android:hint="ANDREW"
             android:text=""
             android:textColorHint="#646a7c"
 
             android:textColor="#ffffff"
             android:textSize="20sp"
             android:padding="10dp"
-            android:layout_marginTop="-20px"
+            android:layout_marginTop="10px"
 
             />
 
         <Button
-            android:id="@+id/submit_create_button"
+            android:id="@+id/submit_name"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="250dp"
             android:layout_height="wrap_content"

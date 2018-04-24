@@ -4,6 +4,7 @@
 package com.example.alex.tuneup;
 
         import android.content.Intent;
+        import android.content.SharedPreferences;
         import android.os.Bundle;
         import android.app.Activity;
         import android.view.LayoutInflater;
@@ -43,7 +44,7 @@ public class v_home extends Activity {
         entry = findViewById(R.id.lobby_search);
 
 
-
+        checkUserID();
 
 
         create.setOnClickListener(new View.OnClickListener() {
@@ -81,5 +82,22 @@ public class v_home extends Activity {
 
     }
 
+
+    private boolean checkUserID() {
+
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("settings", 0);
+//        settings.edit().remove("userID").commit();
+//        settings.edit().remove("displayName").commit();
+        String userID = settings.getString("userID", "");
+        String displayName = settings.getString("displayName", "");
+        if(userID.equals("")) {
+            Intent i = new Intent(getApplicationContext(), v_first_open.class);
+            startActivity(i);
+        }
+
+//        Toast.makeText(v_home.this, userID + " " + displayName, Toast.LENGTH_SHORT).show();
+
+        return false;
+    }
 
 }

@@ -33,7 +33,8 @@
             />
         <activity android:name=".v_lobby_noStream" />
         <activity android:name=".v_viewQueue"></activity>
-        <activity android:name=".v_first_open"></activity>
+        <activity android:name=".v_first_open"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
 
     </application>
 
