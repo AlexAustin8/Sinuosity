@@ -31,7 +31,7 @@ import java.util.TimerTask;
 
 public class v_lobby_noStream extends Activity {
     private String url = "https://thisisjustaplaceholderuntilwegetproperurl.gov", name;  //Replace with proper URL to connect with the server
-    private ImageView albumCover,album_art_next,source_next;
+    private ImageView albumCover,album_art_next,source_next,bSettings;
     private TextView songInfo, lobbyName,num_members, song_title_next,artist_name_next;
     private String key, trackInfo, numMembers;
     private JSONObject currentTrack, nextTrack;    //This lobby will not stream, therefore, we only need to have the JSON object of the current track
@@ -79,6 +79,7 @@ public class v_lobby_noStream extends Activity {
         artist_name_next = findViewById(R.id.artist_name_next);
         album_art_next = findViewById(R.id.album_art_next);
         source_next = findViewById(R.id.source);
+        bSettings = findViewById(R.id.bSetting);
         populateLobby();
 
         t.schedule(new TimerTask() {
@@ -94,7 +95,7 @@ public class v_lobby_noStream extends Activity {
         backButton.setOnClickListener(buttonListener);
         searchButton.setOnClickListener(buttonListener);
         viewQueue.setOnClickListener(buttonListener);
-
+        bSettings.setOnClickListener(buttonListener);
     }
 
     View.OnClickListener buttonListener = new View.OnClickListener() {
@@ -112,6 +113,11 @@ public class v_lobby_noStream extends Activity {
                     // Toast.makeText(lobby_streamHidden.this, "Hello", Toast.LENGTH_LONG).show();
                     i = new Intent(getApplicationContext(), v_queue.class);
                     i.putExtra("lobbyKey", key);
+                    startActivity(i);
+                    break;
+                case R.id.bSetting:
+                    // Toast.makeText(lobby_streamHidden.this, "Hello", Toast.LENGTH_LONG).show();
+                    i = new Intent(getApplicationContext(), v_settings.class);
                     startActivity(i);
                     break;
 

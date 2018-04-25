@@ -33,7 +33,7 @@ public class v_lobby extends AppCompatActivity {
     private TextView songInfo, lobbyName;
     private Config playerConfig;
     private Button searchButton, viewQueue, playButton;
-    private ImageView backButton;
+    private ImageView backButton, bSetting;
     private String key, trackInfo, numMembers;
     private Track currentTrack;
     private RequestManager r;
@@ -71,6 +71,7 @@ public class v_lobby extends AppCompatActivity {
         albumCover = findViewById(R.id.imageView);
         songInfo = findViewById(R.id.song_info);
         lobbyName = findViewById(R.id.lobby_name);
+        bSetting = findViewById(R.id.bSetting);
         //End UI Assignment
 
         //Declare Request Manager to use within the rest of the activity
@@ -100,7 +101,7 @@ public class v_lobby extends AppCompatActivity {
         playButton.setOnClickListener(buttonListener);
         searchButton.setOnClickListener(buttonListener);
         viewQueue.setOnClickListener(buttonListener);
-
+        bSetting.setOnClickListener(buttonListener);
         while (true) {
             try {
                 streamCompletionCheck.start();
@@ -143,6 +144,10 @@ public class v_lobby extends AppCompatActivity {
         public void onClick(View v) {
             Intent i;
             switch (v.getId()) {
+                case R.id.bSetting:
+                    i = new Intent(getApplicationContext(), v_settings.class);
+                    startActivity(i);
+                    break;
                 case R.id.bAddSong:
                     i = new Intent(getApplicationContext(), v_search.class);
                     i.putExtra("lobbyKey", key);
@@ -171,6 +176,8 @@ public class v_lobby extends AppCompatActivity {
                     i.putExtra("lobbyKey", key);
                     startActivity(i);
                     break;
+
+
             }
 
         }
