@@ -81,7 +81,7 @@ public class QueueAdapter extends BaseAdapter{
             String uri = j.getString("uri");
             String title = j.getString("title");
             String artist = j.getString("artist");
-            String small_artwork = j.getString("small_artwork_url");
+
             String artwork = j.getString("artwork_url");
             String source = j.getString("src");
             String votes = j.getString("votes");
@@ -94,7 +94,7 @@ public class QueueAdapter extends BaseAdapter{
             songScore.setText(votes);
             titleView.setText(URLDecoder.decode(URLDecoder.decode(title)));
             artistView.setText(URLDecoder.decode(URLDecoder.decode(artist)));
-            Bitmap img = new GetAlbumArt().execute(URLDecoder.decode(small_artwork)).get();
+            Bitmap img = new GetAlbumArt().execute(URLDecoder.decode(artwork)).get();
             albumartView.setImageBitmap(img);
 
         }catch (Exception e){
