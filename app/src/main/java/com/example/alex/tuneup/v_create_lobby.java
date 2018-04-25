@@ -1,6 +1,7 @@
 package com.example.alex.tuneup;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -56,10 +57,12 @@ public class v_create_lobby extends AppCompatActivity {
         //First check to see if player is null, then do test cases for the other things
         public void onClick(View v) {
             String name = nameInput.getText().toString(); //Name to be sent to server
-            String id = "0uhxnz"; //Using a dummy id for now
+            SharedPreferences settings = getApplicationContext().getSharedPreferences("settings", 0);
+            String userID = settings.getString("userID", "");
             RequestManager r = new RequestManager();
+
             //Although it does not yet, web_Create will return the lobby key, so afterwards the following line will be valid
-            String code = r.web_lobbyCreate(name, id);
+            String code = r.web_lobbyCreate(name, userID);
             Intent i = new Intent(getApplicationContext(), lobby_streamHidden.class);
             i.putExtra("lobbyKey", code);
             startActivity(i);

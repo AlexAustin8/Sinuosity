@@ -68,7 +68,7 @@
             android:ems="10"
             android:gravity="center"
             android:inputType="textPersonName"
-            android:hint="ANDREW"
+            android:hint="Johnny Appleseed"
             android:text=""
             android:textColorHint="#646a7c"
 
