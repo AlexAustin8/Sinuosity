@@ -24,14 +24,13 @@
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".v_lobby" />
+        <activity android:name=".v_lobby_noStream" />
         <activity android:name=".v_search" />
-        <activity android:name=".lobby_streamHidden" />
+        <activity android:name=".v_lobby" />
         <activity android:name=".v_create_lobby"
             android:theme="@style/Theme.AppCompat.NoActionBar"
 
             />
-        <activity android:name=".v_lobby_noStream" />
         <activity android:name=".v_queue"></activity>
         <activity android:name=".v_first_open"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>

@@ -55,9 +55,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="385dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-
+        android:layout_marginBottom="200dp"
         >
 
 
@@ -149,12 +149,24 @@
 
     </LinearLayout>
 
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:layout_marginTop="-200dp"
+        >
+
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal"
+
         >
 
         <TextView
@@ -224,12 +236,108 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+
                 >
 
 
-                <ListView
+                <TextView
+                    android:id="@+id/textView2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content"
+                    android:text="UP NEXT:"
+                    android:textColor="#ffffff"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="13dp"
+                    />
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/up_next">
+
+                    <ImageView
+                        android:id="@+id/album_art_next"
+                        android:layout_width="@dimen/album_art_dimen"
+                        android:layout_height="@dimen/album_art_dimen"
+                        />
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp">
+
+                        <TextView
+                            android:id="@+id/song_title_next"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:paddingLeft="@dimen/result_padding"
+                            android:paddingRight="20dip"
+                            android:text="Song Title"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                            android:textColor="#ffffff"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:visibility="visible"
+                            app:layout_constraintLeft_toRightOf="@+id/album_art" />
+
+
+                        <TextView
+                            android:id="@+id/artist_name_next"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:paddingLeft="@dimen/result_padding"
+                            android:paddingRight="20dip"
+                            android:text="Artist"
+                            android:textColor="#ffffff"
+                            android:textSize="12sp"
+                            android:visibility="visible"
+                            app:layout_constraintLeft_toRightOf="@+id/album_art"
+                            app:layout_constraintTop_toBottomOf="@+id/song_title" />
+
+
+                    </LinearLayout>
+
+                    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+
+                        >
+
+
+
+                        <ImageView
+                            android:id="@+id/source"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/add_song"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="10dp"
+                            android:alpha=".7"/>
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
 
@@ -277,6 +385,6 @@
 
 
     </LinearLayout>
-
+    </LinearLayout>
 
 </LinearLayout>

@@ -212,15 +212,15 @@ public class RequestManager {
     // --------------------------------------------------------------------------------------
 
     public String loc_lobbyPlaying(String index) {
-        return URLDecoder.decode(pullSongValue(index, lobbyPlaying));
+        return URLDecoder.decode(URLDecoder.decode(pullSongValue(index, lobbyPlaying)));
     }
 
     public String loc_lobbyUpNext(String index) {
-        return URLDecoder.decode(pullSongValue(index, lobbyUpNext));
+        return URLDecoder.decode(URLDecoder.decode(pullSongValue(index, lobbyUpNext)));
     }
 
     public String loc_lobbyName() {
-        return URLDecoder.decode(lobbyName);
+        return URLDecoder.decode(URLDecoder.decode(lobbyName));
     }
 
     public String loc_lobbyAdmin() {

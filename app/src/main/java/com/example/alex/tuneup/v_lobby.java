@@ -1,14 +1,10 @@
-
-
-
 package com.example.alex.tuneup;
 
-import android.app.DownloadManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.graphics.Bitmap;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,28 +12,31 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
+import com.spotify.sdk.android.authentication.AuthenticationClient;
+import com.spotify.sdk.android.authentication.AuthenticationResponse;
+import com.spotify.sdk.android.player.Config;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class v_lobby extends Activity {
+
+public class v_lobby extends AppCompatActivity {
+    private static final String CLIENT_ID = "cf7eda43f4ab43e59c74091e4259d9b2";
+    private static final String REDIRECT_URI = "tuneup-log://callback";
+    private static final int REQUEST_CODE = 1337;
+
     private String url = "https://thisisjustaplaceholderuntilwegetproperurl.gov", name;  //Replace with proper URL to connect with the server
     private ImageView albumCover;
-    private TextView songInfo, lobbyName,num_members;
+    private TextView songInfo, lobbyName;
+    private Config playerConfig;
+    private Button searchButton, viewQueue, playButton;
+    private ImageView backButton;
     private String key, trackInfo, numMembers;
-    private JSONObject currentTrack, nextTrack;    //This lobby will not stream, therefore, we only need to have the JSON object of the current track
-    private RequestManager r = new RequestManager();
-    private String userID = "";
-    private Timer t = new Timer();
+    private Track currentTrack;
+    private RequestManager r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,34 +63,79 @@ public class v_lobby extends Activity {
         final LayoutInflater factory = getLayoutInflater();
         final View topLayout = factory.inflate(R.layout.lobby_top, null);
 
-        SharedPreferences settings = getApplicationContext().getSharedPreferences("settings", 0);
-        userID = settings.getString("userID", "");
 
-        Button searchButton = (Button) findViewById(R.id.bAddSong);
-        Button viewQueue = (Button) findViewById(R.id.bViewQueue);
-        ImageView backButton = (ImageView) findViewById(R.id.bBack);
-
+        searchButton = findViewById(R.id.bAddSong);
+        viewQueue = findViewById(R.id.bViewQueue);
+        playButton = findViewById(R.id.play_button);
+        backButton = findViewById(R.id.bBack);
         albumCover = findViewById(R.id.imageView);
         songInfo = findViewById(R.id.song_info);
         lobbyName = findViewById(R.id.lobby_name);
-        num_members = findViewById(R.id.num_members);
+        //End UI Assignment
 
-        populateLobby();
+        //Declare Request Manager to use within the rest of the activity
+        r = new RequestManager();
 
-        t.schedule(new TimerTask() {
 
-            @Override
+        //Declare Thread that determines when to change track
+        Thread streamCompletionCheck = new Thread("Stream Check") {
             public void run() {
-                populateLobby();
+                while (!currentTrack.isStreamFinished()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        Log.i("Thread Error", e.getMessage());
+                    }
+                }
+                r.web_queueShift(key);
             }
-        }, 0, 3000);
+        };
 
+
+        //Initial Lobby creation for whatever the current song is when lobby is first joined by user
+        populateLobby();
 
         //Declare listeners for all Buttons
         backButton.setOnClickListener(buttonListener);
+        playButton.setOnClickListener(buttonListener);
         searchButton.setOnClickListener(buttonListener);
         viewQueue.setOnClickListener(buttonListener);
 
+        while (true) {
+            try {
+                streamCompletionCheck.start();
+                streamCompletionCheck.join();
+                populateLobby();
+            } catch (Exception e) {
+                Log.i("Thread Error", e.getMessage());
+            }
+        }
+    }
+
+
+
+
+
+    protected void populateLobby() {
+        try {
+            r.web_lobbyGetData(key);
+            if (r.loc_lobbyPlaying("source").compareTo("Soundcloud") == 0) {
+                currentTrack = new SoundCloudTrack(key);
+            } else {
+                currentTrack = new SpotifyTrack(key, playerConfig);
+            }
+            //Populate data, this maybe could use some refactoring, since we are declaring a track object that can hold some of these values
+            name = r.loc_lobbyName();
+            lobbyName.setText(URLDecoder.decode(name, "UTF-8"));
+            trackInfo = URLDecoder.decode((r.loc_lobbyPlaying("name") + " - " + r.loc_lobbyPlaying("artist")), "UTF-8");
+            songInfo.setText(trackInfo);
+            Bitmap img = new GetAlbumArt().execute(r.loc_lobbyPlaying("artwork")).get();
+            albumCover.setImageBitmap(img);
+            numMembers = r.loc_lobbyMembersCount();
+        } catch (Exception e) {
+            Log.i("Error loading lobby", e.getMessage());
+            Toast.makeText(v_lobby.this, "Error Loading Lobby Data", Toast.LENGTH_LONG).show();
+        }
     }
 
     View.OnClickListener buttonListener = new View.OnClickListener() {
@@ -112,15 +156,17 @@ public class v_lobby extends Activity {
                     startActivity(i);
                     break;
 
+                case R.id.play_button:
+                    if (currentTrack.isPlaying()) {
+                        currentTrack.pause();
+                        playButton.setText(getResources().getString(R.string.resume));
+                    } else if (!currentTrack.isPlaying()) {
+                        currentTrack.resume();
+                        playButton.setText(getResources().getString(R.string.pause));
+                    }
+                    break;
+
                 case R.id.bBack:
-                    r.web_lobbyLeave(key, userID);
-
-                    SharedPreferences settings = getApplicationContext().getSharedPreferences("settings", 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("lobbyID", "");
-                    editor.apply();
-
-                    t.cancel();
                     i = new Intent(getApplicationContext(), v_home.class);
                     i.putExtra("lobbyKey", key);
                     startActivity(i);
@@ -133,26 +179,18 @@ public class v_lobby extends Activity {
     };
 
 
-
-    protected void populateLobby() {
-        try {
-
-//            Log.i("Run", "running");
-            r.web_lobbyGetData(key);
-
-            //Populate data, this maybe could use some refactoring, since we are declaring a track object that can hold some of these values
-            name = r.loc_lobbyName();
-            num_members.setText(r.loc_lobbyMembersCount());
-            lobbyName.setText(URLDecoder.decode(name, "UTF-8"));
-            trackInfo = URLDecoder.decode((r.loc_lobbyPlaying("name") + " - " + r.loc_lobbyPlaying("artist")), "UTF-8");
-            songInfo.setText(trackInfo);
-            Bitmap img = new GetAlbumArt().execute(r.loc_lobbyPlaying("artwork")).get();
-            albumCover.setImageBitmap(img);
-            numMembers = r.loc_lobbyMembersCount();
-        } catch (Exception e) {
-            Log.i("Error loading lobby", e.getMessage());
-//            Toast.makeText(v_lobby.this, "Error Loading Lobby Data", Toast.LENGTH_LONG).show();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        // Check if result comes from the correct activity
+        if (requestCode == REQUEST_CODE) {
+            AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
+            if (response.getType() == AuthenticationResponse.Type.TOKEN) {
+                playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
+                currentTrack = new SpotifyTrack(playerConfig);
+            }
         }
     }
+
 
 }

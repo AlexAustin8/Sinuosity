@@ -13,10 +13,11 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="445dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@drawable/player_bg_top"
-        android:gravity="bottom" >
+        android:gravity="bottom"
+        android:layout_marginBottom="200dp">
 
 
         <ImageView
@@ -37,7 +38,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="-200dp"
         android:orientation="vertical"
         android:background="@drawable/player_bg_bottom">
 

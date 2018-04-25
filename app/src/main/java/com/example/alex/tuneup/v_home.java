@@ -148,7 +148,7 @@ public class v_home extends Activity {
             rManger.web_lobbyJoin(lobbyID, userID);
 
 
-            Intent i = new Intent(getApplicationContext(), v_lobby.class);
+            Intent i = new Intent(getApplicationContext(), v_lobby_noStream.class);
             i.putExtra("lobbyKey", lobbyID);
             startActivity(i);
         }else{

@@ -68,7 +68,7 @@ public class v_create_lobby extends AppCompatActivity {
             editor.putString("lobbyID", code);
             editor.apply();
 
-            Intent i = new Intent(getApplicationContext(), lobby_streamHidden.class);
+            Intent i = new Intent(getApplicationContext(), v_lobby.class);
             i.putExtra("lobbyKey", code);
             startActivity(i);
         }
