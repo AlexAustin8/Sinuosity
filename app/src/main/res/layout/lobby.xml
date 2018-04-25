@@ -51,7 +51,7 @@
             android:layout_height="40dp"
             android:orientation="vertical"
             android:background="#000000"
-            android:alpha=".3">
+            android:alpha=".5">
 
 
         </LinearLayout>

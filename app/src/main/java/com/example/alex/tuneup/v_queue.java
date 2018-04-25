@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -60,17 +62,18 @@ public class v_queue extends Activity {
         queueList = this.findViewById(R.id.queue_list);
         context = getApplicationContext();
 
-        runSearch();
+        runBackground();
 
         timer.schedule(new TimerTask() {
 
             @Override
             public void run() {
 
-
-                runSearch();
-
-
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        runBackground();
+                    }
+                });
 
             }
         }, 0, 1000);
@@ -107,32 +110,47 @@ public class v_queue extends Activity {
     // Creates an async task that reaches out to the server with a search query, and returns the adapter.
     // By returning an adapter verses the json string, it prevents the UI from hanging
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public void runSearch() {
 
 
-            try {
 
-                SharedPreferences settings = context.getSharedPreferences("settings", 0);
 
-                String lobbyID = settings.getString("lobbyID", "");
 
-                RequestManager rm = new RequestManager();
-                rm.web_queueGetData(lobbyID);
-                adapter = rm.loc_queueAdapter(getApplicationContext());
-
-            } catch (Exception e) {
-                Log.i("[+] Search Error", e.getMessage());
+    private void runBackground() {
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                queueList.setAdapter(adapter);
             }
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    queueList.setAdapter(adapter);
+        };
 
+        Runnable runnable = new Runnable() {
+            public void run() {
+                Message msg = handler.obtainMessage();
+                Bundle bundle = new Bundle();
+
+                try {
+
+                    SharedPreferences settings = context.getSharedPreferences("settings", 0);
+
+                    String lobbyID = settings.getString("lobbyID", "");
+
+                    RequestManager rm = new RequestManager();
+                    rm.web_queueGetData(lobbyID);
+                    adapter = rm.loc_queueAdapter(getApplicationContext());
+
+                } catch (Exception e) {
+                    Log.i("[+] Search Error", e.getMessage());
                 }
-            });
 
+
+                msg.setData(bundle);
+                handler.sendMessage(msg);
+            }
+        };
+
+        Thread mythread = new Thread(runnable);
+        mythread.start();
     }
-
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 

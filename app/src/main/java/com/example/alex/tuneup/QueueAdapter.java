@@ -126,9 +126,7 @@ public class QueueAdapter extends BaseAdapter{
 
             rm.web_queueVoteSong("true", lobbyID, uri);
             Toast.makeText(context, "Upvoted song." , Toast.LENGTH_SHORT).show();
-            if(mContext instanceof v_queue){
-                ((v_queue)mContext).runSearch();
-            }
+
         }
 
     };
