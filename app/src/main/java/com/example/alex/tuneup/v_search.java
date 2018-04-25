@@ -1,8 +1,14 @@
 package com.example.alex.tuneup;
+import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,6 +26,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.net.URL;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,6 +43,9 @@ public class v_search extends Activity {
     Timer timer = new Timer();
     int checkChangeCount = 0;
     String lastSearch = "";
+    pl.droidsonroids.gif.GifImageView loaderIcon;
+    RequestManager rm;
+    Handler handler;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,14 +64,18 @@ public class v_search extends Activity {
                         ViewGroup.LayoutParams.FILL_PARENT));
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+        rm = new RequestManager();
         spSearch = this.findViewById(R.id.spotify_search);
         scSearch = this.findViewById(R.id.soundcloud_search);
         searchBar = this.findViewById(R.id.search_input);
         resultList = this.findViewById(R.id.result_list);
         spSearch.toggle();
         context = getApplicationContext();
+        loaderIcon = findViewById(R.id.loaderIcon);
 
 
+        loaderIcon.setVisibility(View.GONE);
 
 
         // Enables back button on top nav bar
@@ -89,8 +104,10 @@ public class v_search extends Activity {
                     switch (keyCode) {
                         case KeyEvent.KEYCODE_DPAD_CENTER:
                         case KeyEvent.KEYCODE_ENTER:
-
+                            resultList.setVisibility(View.INVISIBLE);
+                            loaderIcon.setVisibility(View.VISIBLE);
                             runSearch();
+                            threadTwo();
 
                             return true;
                         default:
@@ -115,7 +132,12 @@ public class v_search extends Activity {
                 EditText input = (EditText) findViewById(R.id.search_input);
                 String curr = input.getText().toString();
                 if (!curr.equals("")) {
+                    resultList.setVisibility(View.INVISIBLE);
+                    loaderIcon.setVisibility(View.VISIBLE);
                     runSearch();
+                    threadTwo();
+
+
                 }
             }
         });
@@ -144,7 +166,12 @@ public class v_search extends Activity {
 
                 if (checkChangeCount >= 2) {
                     if (!lastSearch.equals(currentTerm)) {
-                        runSearch();
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                threadTwo();
+                            }
+                        });
+
                         checkChangeCount = 0;
                         lastSearch = currentTerm;
                     } else {
@@ -163,6 +190,8 @@ public class v_search extends Activity {
 
         ListView lv = findViewById(R.id.result_list);
         lv.setOnItemClickListener(onItemClickListener);
+
+
 
 
     }
@@ -230,52 +259,76 @@ public class v_search extends Activity {
     // Creates an async task that reaches out to the server with a search query, and returns the adapter.
     // By returning an adapter verses the json string, it prevents the UI from hanging
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public void runSearch() {
 
-        String type = "spotify";
-        RadioButton sc = (RadioButton) findViewById(R.id.soundcloud_search);
-
-
-        if (sc.isChecked()) {
-            type = "soundcloud";
-        } else {
-            type = "spotify";
-        }
-
-
-        EditText searchText = v_search.this.findViewById(R.id.search_input);
-        term = searchText.getText().toString();
-
-
-
-
-        if(!term.equals("")) {
-
-
-
-        try {
-
-            RequestManager rm = new RequestManager();
-            rm.web_searchGetData(type,term);
-            adapter = rm.loc_searchAdapter(getApplicationContext());
-        } catch (Exception e) {
-            Log.i("[+] Search Error", e.getMessage());
-        }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                resultList.setAdapter(adapter);
-
-            }
-        });
-        } else {
-//            Toast.makeText(getApplicationContext(), "Enter a song", Toast.LENGTH_SHORT).show();
-
-        }
-    }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+    public void runSearch() {
+
+
+    }
+
+
+    private void threadTwo() {
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                adapter = rm.loc_searchAdapter(getApplicationContext());
+                resultList.setAdapter(adapter);
+
+                resultList.setVisibility(View.VISIBLE);
+                loaderIcon.setVisibility(View.INVISIBLE);
+            }
+        };
+
+        Runnable runnable = new Runnable() {
+            public void run() {
+                Message msg = handler.obtainMessage();
+                Bundle bundle = new Bundle();
+
+                String type = "spotify";
+                RadioButton sc = (RadioButton) findViewById(R.id.soundcloud_search);
+
+
+                if (sc.isChecked()) {
+                    type = "soundcloud";
+                } else {
+                    type = "spotify";
+                }
+
+
+                EditText searchText = v_search.this.findViewById(R.id.search_input);
+                term = searchText.getText().toString();
+
+
+
+
+                if(!term.equals("")) {
+
+
+
+                    try {
+
+
+                        rm.web_searchGetData(type,term);
+
+                    } catch (Exception e) {
+                        Log.i("[+] Search Error", e.getMessage());
+                    }
+
+                } else {
+//            Toast.makeText(getApplicationContext(), "Enter a song", Toast.LENGTH_SHORT).show();
+
+                }
+
+                msg.setData(bundle);
+                handler.sendMessage(msg);
+            }
+        };
+
+        Thread mythread = new Thread(runnable);
+        mythread.start();
+    }
 
 }
