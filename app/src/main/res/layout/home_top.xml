@@ -48,7 +48,7 @@
                 android:textColor="#ffffff"
                 android:textSize="28sp"
                 android:padding="10dp"
-                android:letterSpacing=".3"
+                android:letterSpacing=".2"
                 />
 
             <Button

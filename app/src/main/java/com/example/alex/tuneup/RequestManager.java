@@ -187,6 +187,24 @@ public class RequestManager {
 
     // --------------------------------------------------------------------------------------
 
+    public Boolean web_lobbyCheckExists(String lobbyID) {
+        Boolean exists = false;
+        try {
+            SendRequest async = new SendRequest();
+            String response = async.execute(serverAddress + "lobby/checkExists.php", "lobbyID", lobbyID).get();
+            if(response.equals("true")) {
+                exists = true;
+            }
+
+        } catch(Exception e) {
+            Log.i("err", e.getMessage());
+
+        }
+        return exists;
+    }
+
+    // --------------------------------------------------------------------------------------
+
     public String loc_lobbyPlaying(String index) {
         return pullSongValue(index, lobbyPlaying);
     }
@@ -207,7 +225,7 @@ public class RequestManager {
         return Integer.toString(lobbyMembers.length());
     }
 
-    public Boolean loc_lobbyCheckExists() { return lobbyExists; }
+
 
 
     // ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^

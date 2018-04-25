@@ -64,14 +64,14 @@ public class v_home extends Activity {
                 String userID = settings.getString("userID", "");
 
                 RequestManager rManger = new RequestManager();
-                rManger.web_lobbyGetData(lobbyID);
-                if(rManger.loc_lobbyCheckExists()){
+
+                if(rManger.web_lobbyCheckExists(lobbyID)){
                     rManger.web_lobbyJoin(lobbyID, userID);
                     Intent i = new Intent(getApplicationContext(), v_lobby.class);
                     i.putExtra("lobbyKey", lobbyID);
                     startActivity(i);
                 }else{
-                    Toast.makeText(getApplicationContext(), "Lobby Not Found, Please Try Another Search", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Lobby not found.", Toast.LENGTH_SHORT).show();
                 }
 
 
