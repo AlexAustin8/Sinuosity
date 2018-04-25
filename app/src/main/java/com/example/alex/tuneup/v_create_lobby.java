@@ -63,6 +63,11 @@ public class v_create_lobby extends AppCompatActivity {
 
             //Although it does not yet, web_Create will return the lobby key, so afterwards the following line will be valid
             String code = r.web_lobbyCreate(name, userID);
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("lobbyID", code);
+            editor.apply();
+
             Intent i = new Intent(getApplicationContext(), lobby_streamHidden.class);
             i.putExtra("lobbyKey", code);
             startActivity(i);

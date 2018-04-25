@@ -29,13 +29,13 @@ import java.util.ArrayList;
  * Created by alex on 4/2/18.
  */
 
-public class TrackAdapter extends BaseAdapter{
+public class QueueAdapter extends BaseAdapter{
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<JSONObject> mDataSource;
     private Context context;
 
-    public TrackAdapter(Context context, ArrayList<JSONObject> results){
+    public QueueAdapter(Context context, ArrayList<JSONObject> results){
         mContext = context;
         mDataSource = results;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -58,16 +58,21 @@ public class TrackAdapter extends BaseAdapter{
     public View getView(int position, View view, ViewGroup viewGroup){
 
 
-        View rowView = mInflater.inflate(R.layout.search_result_layout, viewGroup,false);
+        View rowView = mInflater.inflate(R.layout.queue_result_layout, viewGroup,false);
+
+        ImageView downvoteButton = rowView.findViewById(R.id.bDownvote);
+        downvoteButton.setOnClickListener(downListener);
+
+        ImageView upvoteButton = rowView.findViewById(R.id.bUpvote);
+        upvoteButton.setOnClickListener(upListener);
 
         TextView titleView = rowView.findViewById(R.id.song_title);
+        TextView songScore = rowView.findViewById(R.id.songScore);
+
         TextView artistView = rowView.findViewById(R.id.artist_name);
         ImageView albumartView = rowView.findViewById(R.id.album_art);
 
-        ImageView addButton = rowView.findViewById(R.id.bAddSong);
 
-
-        addButton.setOnClickListener(myButtonClickListener);
 
         JSONObject j = (JSONObject) getItem(position);
         try {
@@ -76,19 +81,20 @@ public class TrackAdapter extends BaseAdapter{
             String uri = j.getString("uri");
             String title = j.getString("title");
             String artist = j.getString("artist");
-            String duration = j.getString("duration");
+
             String artwork = j.getString("artwork_url");
             String source = j.getString("src");
-
+            String votes = j.getString("votes");
             // SPxxxL used to split the string, not sure of a better solution beause you can only set button tag to a single string
-            String tagString = uri + "SPxxxL" + title + "SPxxxL" + artist + "SPxxxL" + duration + "SPxxxL" + artwork + "SPxxxL" + source;
 
-            addButton.setTag(tagString);
+            String tagString = uri;
+            downvoteButton.setTag(tagString);
+            upvoteButton.setTag(tagString);
 
-
-            titleView.setText(URLDecoder.decode(title));
-            artistView.setText(URLDecoder.decode(artist));
-            Bitmap img = new GetAlbumArt().execute(artwork).get();
+            songScore.setText(votes);
+            titleView.setText(URLDecoder.decode(URLDecoder.decode(title)));
+            artistView.setText(URLDecoder.decode(URLDecoder.decode(artist)));
+            Bitmap img = new GetAlbumArt().execute(URLDecoder.decode(artwork)).get();
             albumartView.setImageBitmap(img);
 
         }catch (Exception e){
@@ -100,36 +106,48 @@ public class TrackAdapter extends BaseAdapter{
         return rowView;
     }
 
-    private View.OnClickListener myButtonClickListener = new View.OnClickListener() {
+    private View.OnClickListener upListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View xView) {
-            String[] data = xView.getTag().toString().split("SPxxxL");
-
-
-            String uri = data[0];
-            String title = data[1];
-            String artist = data[2];
-            String duration = data[3];
-            String artwork = data[4];
-            String source = data[5];
+            String uri = xView.getTag().toString();
 
 
 
             Context context = xView.getContext();
 
 
+
+
             RequestManager rm = new RequestManager();
 
             SharedPreferences settings = context.getSharedPreferences("settings", 0);
-            String userID = settings.getString("userID", "");
             String lobbyID = settings.getString("lobbyID", "");
 
+            rm.web_queueVoteSong("true", lobbyID, uri);
+            Toast.makeText(context, "Upvoted song." , Toast.LENGTH_SHORT).show();
+            if(mContext instanceof v_queue){
+                ((v_queue)mContext).runSearch();
+            }
+        }
 
+    };
 
-            rm.web_queueAddSong(userID, lobbyID, uri, title,artist,duration,artwork,source);
+    private View.OnClickListener downListener = new View.OnClickListener() {
 
-            Toast.makeText(context, "Added " + URLDecoder.decode(title) + " to the queue." , Toast.LENGTH_SHORT).show();
+        @Override
+        public void onClick(View xView) {
+            String uri = xView.getTag().toString();
+
+            Context context = xView.getContext();
+
+            RequestManager rm = new RequestManager();
+
+            SharedPreferences settings = context.getSharedPreferences("settings", 0);
+            String lobbyID = settings.getString("lobbyID", "");
+
+            rm.web_queueVoteSong("false", lobbyID, uri);
+            Toast.makeText(context, "Downvoted song." , Toast.LENGTH_SHORT).show();
 
         }
 

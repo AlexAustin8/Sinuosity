@@ -1,5 +1,6 @@
 package com.example.alex.tuneup;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -62,17 +65,14 @@ public class v_search extends Activity {
 
         // Enables back button on top nav bar
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        final LayoutInflater factory = getLayoutInflater();
-        final View topLayout = factory.inflate(R.layout.lobby_top, null);
-        ImageView backButton = (ImageView) topLayout.findViewById(R.id.bBack);
+        ImageView backButton = (ImageView) findViewById(R.id.bBackSearch);
 
 
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Enter a song", Toast.LENGTH_SHORT).show();
-
+                v_search.this.onBackPressed();
             }
         });
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -161,7 +161,23 @@ public class v_search extends Activity {
         }, 0, 600);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+        ListView lv = findViewById(R.id.result_list);
+        lv.setOnItemClickListener(onItemClickListener);
+
+
     }
+
+    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+        }
+
+    };
+
+
+
 
 
 
@@ -230,18 +246,18 @@ public class v_search extends Activity {
         EditText searchText = v_search.this.findViewById(R.id.search_input);
         term = searchText.getText().toString();
 
+
+
+
         if(!term.equals("")) {
 
 
 
         try {
 
-
             RequestManager rm = new RequestManager();
             rm.web_searchGetData(type,term);
             adapter = rm.loc_searchAdapter(getApplicationContext());
-
-
         } catch (Exception e) {
             Log.i("[+] Search Error", e.getMessage());
         }
@@ -253,7 +269,7 @@ public class v_search extends Activity {
             }
         });
         } else {
-            Toast.makeText(getApplicationContext(), "Enter a song", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Enter a song", Toast.LENGTH_SHORT).show();
 
         }
     }

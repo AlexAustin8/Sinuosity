@@ -6,6 +6,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 /**
@@ -23,6 +24,7 @@ public class RequestManager {
     private String displayName;
 
     private String lobbyID;
+    private String lobbyAdmin;
     private String lobbyName;
     private JSONArray lobbyMembers;
     private JSONArray lobbyPlaying;
@@ -120,6 +122,7 @@ public class RequestManager {
         try {
             SendRequest async = new SendRequest();
             String response = async.execute(serverAddress + "lobby/join.php", "lobbyID", lobbyID, "userID", userID).get();
+
         } catch(Exception e) {
             Log.i("err", e.getMessage());
 
@@ -171,6 +174,7 @@ public class RequestManager {
                 JSONObject responseObj = jsonArray.getJSONObject(0);
 
                 lobbyName = responseObj.getString("name");
+                lobbyAdmin = responseObj.getString("admin");
                 lobbyMembers = responseObj.getJSONArray("members");
                 lobbyUpNext = responseObj.getJSONArray("upNext");
                 lobbyPlaying = responseObj.getJSONArray("playing");
@@ -178,7 +182,7 @@ public class RequestManager {
 
 
         } catch(Exception e) {
-            Log.i("err", e.getMessage());
+            Log.i("Get Data Error", e.getMessage());
 
         }
 
@@ -192,6 +196,8 @@ public class RequestManager {
         try {
             SendRequest async = new SendRequest();
             String response = async.execute(serverAddress + "lobby/checkExists.php", "lobbyID", lobbyID).get();
+            Log.i("lobbyFound", response);
+
             if(response.equals("true")) {
                 exists = true;
             }
@@ -206,15 +212,19 @@ public class RequestManager {
     // --------------------------------------------------------------------------------------
 
     public String loc_lobbyPlaying(String index) {
-        return pullSongValue(index, lobbyPlaying);
+        return URLDecoder.decode(pullSongValue(index, lobbyPlaying));
     }
 
     public String loc_lobbyUpNext(String index) {
-        return pullSongValue(index, lobbyUpNext);
+        return URLDecoder.decode(pullSongValue(index, lobbyUpNext));
     }
 
     public String loc_lobbyName() {
-        return lobbyName;
+        return URLDecoder.decode(lobbyName);
+    }
+
+    public String loc_lobbyAdmin() {
+        return lobbyAdmin;
     }
 
     public JSONArray loc_lobbyMembers() {
@@ -253,7 +263,7 @@ public class RequestManager {
         try {
             SendRequest async = new SendRequest();
             String response = async.execute(serverAddress + "search/" + type + ".php", "query", term).get();
-
+            Log.e("Search results:" , response);
             JSONArray jsonArray;
 
 
@@ -308,10 +318,8 @@ public class RequestManager {
             SendRequest async = new SendRequest();
             String response = async.execute(serverAddress + "/queue/getData.php","lobbyID", lobbyID).get();
 
-            JSONArray jsonArray;
+            JSONArray jsonArray= new JSONArray(response);
 
-
-            jsonArray = new JSONArray(response);
             for (int i = 0; i < jsonArray.length() ; i++) {
 
                 JSONObject track = jsonArray.getJSONObject(i);
@@ -327,9 +335,9 @@ public class RequestManager {
 
     // --------------------------------------------------------------------------------------
 
-    public TrackAdapter loc_queueAdapter(Context context) {
-        TrackAdapter adapter;
-        adapter = new TrackAdapter(context, queue);
+    public QueueAdapter loc_queueAdapter(Context context) {
+        QueueAdapter adapter;
+        adapter = new QueueAdapter(context, queue);
         return adapter;
     }
 
@@ -363,7 +371,7 @@ public class RequestManager {
 
     // --------------------------------------------------------------------------------------
 
-    public void web_queueVoteSong(Boolean upvote, String lobbyID, String songID) {
+    public void web_queueVoteSong(String upvote, String lobbyID, String songID) {
 
         String boolString = String.valueOf(upvote);
 

@@ -52,7 +52,7 @@ public class SendRequest extends AsyncTask<String, Integer, String> {
 
 
 
-            Log.e("params",postDataParams.toString());
+//            Log.e("params",postDataParams.toString());
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000 /* milliseconds */);
@@ -96,7 +96,7 @@ public class SendRequest extends AsyncTask<String, Integer, String> {
                 response = sb.toString();
 
 
-                Log.i("Results:",response);
+//                Log.i("Results:",response);
 
 
             }

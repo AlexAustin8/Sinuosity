@@ -22,7 +22,7 @@ public class v_viewQueue extends AppCompatActivity {
         key = getIntent().getExtras().getString("lobbyKey");
         RequestManager r = new RequestManager();
         r.web_queueGetData(key);
-        TrackAdapter adapter = r.loc_queueAdapter(getApplicationContext());
+        QueueAdapter adapter = r.loc_queueAdapter(getApplicationContext());
         queue.setAdapter(adapter);
     }
 
