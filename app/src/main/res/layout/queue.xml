@@ -27,6 +27,18 @@
             >
 
 
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-7dp"
+                android:layout_marginTop="10dp"
+                android:text="THE QUEUE"
+
+                android:layout_marginLeft="10dp"
+                android:textColor="#ffffff"
+                android:textSize="25dp"
+                android:textStyle="bold" />
 
             <ListView
                 android:id="@+id/queue_list"
