@@ -31,7 +31,8 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"
 
             />
-        <activity android:name=".v_settings"></activity>
+        <activity android:name=".v_settings"
+            android:theme="@style/AppTheme.Base"></activity>
         <activity android:name=".v_queue"></activity>
         <activity android:name=".v_first_open"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>

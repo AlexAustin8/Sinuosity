@@ -3,7 +3,7 @@
     <EditTextPreference
         android:key="full_name"
         android:title="Display Name"
-        android:summary="Enter Your Complete Name"
+        android:summary="Choose a name to be displayed in lobbies."
         android:dialogTitle="Your Name"
         android:dialogMessage="Enter Your Complete Name"
         android:defaultValue=""
@@ -12,7 +12,7 @@
     <EditTextPreference
         android:key="email_address"
         android:title="Email Address"
-        android:summary="Enter Your Email Address"
+        android:summary="Get updates on our latest releases."
         android:dialogTitle="Enter Your Email Address"
         android:dialogMessage="Enter Your Email Address"
         android:defaultValue=""
