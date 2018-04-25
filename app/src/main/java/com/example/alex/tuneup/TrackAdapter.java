@@ -79,7 +79,7 @@ public class TrackAdapter extends BaseAdapter{
             String duration = j.getString("duration");
             String artwork = j.getString("artwork_url");
             String source = j.getString("src");
-
+            String small_artwork = j.getString("small_artwork_url");
             // SPxxxL used to split the string, not sure of a better solution beause you can only set button tag to a single string
             String tagString = uri + "SPxxxL" + title + "SPxxxL" + artist + "SPxxxL" + duration + "SPxxxL" + artwork + "SPxxxL" + source;
 
@@ -88,7 +88,7 @@ public class TrackAdapter extends BaseAdapter{
 
             titleView.setText(URLDecoder.decode(title));
             artistView.setText(URLDecoder.decode(artist));
-            Bitmap img = new GetAlbumArt().execute(artwork).get();
+            Bitmap img = new GetAlbumArt().execute(small_artwork).get();
             albumartView.setImageBitmap(img);
 
         }catch (Exception e){

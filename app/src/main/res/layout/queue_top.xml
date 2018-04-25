@@ -49,4 +49,23 @@
             android:alpha=".7"/>
 
     </RelativeLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
+        >
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/queueLoaderIcon"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:src="@drawable/loader"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="140dp"/>
+    </LinearLayout>
 </LinearLayout>

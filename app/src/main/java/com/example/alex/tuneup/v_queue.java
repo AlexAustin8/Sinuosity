@@ -38,7 +38,7 @@ public class v_queue extends Activity {
     Timer timer = new Timer();
     int checkChangeCount = 0;
     String lastSearch = "";
-
+    ImageView queueLoader;
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -61,8 +61,10 @@ public class v_queue extends Activity {
 
         queueList = this.findViewById(R.id.queue_list);
         context = getApplicationContext();
-
+        queueLoader = findViewById(R.id.queueLoaderIcon);
         runBackground();
+
+
 
         timer.schedule(new TimerTask() {
 
@@ -119,6 +121,7 @@ public class v_queue extends Activity {
         final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
+                queueLoader.setVisibility(View.INVISIBLE);
                 queueList.setAdapter(adapter);
             }
         };

@@ -58,11 +58,9 @@
 
             <EditText
                 android:id="@+id/new_name_input"
-
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-
                 android:background="@drawable/join_party_text"
                 android:ems="10"
                 android:gravity="center"
@@ -70,11 +68,10 @@
                 android:hint="Lobby Name"
                 android:text=""
                 android:textColorHint="#646a7c"
-
                 android:textColor="#ffffff"
                 android:textSize="20sp"
                 android:padding="10dp"
-                android:layout_marginTop="-40px"
+                android:layout_marginTop="-60px"
 
                 />
 

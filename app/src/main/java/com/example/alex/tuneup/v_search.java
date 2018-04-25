@@ -106,7 +106,7 @@ public class v_search extends Activity {
                         case KeyEvent.KEYCODE_ENTER:
                             resultList.setVisibility(View.INVISIBLE);
                             loaderIcon.setVisibility(View.VISIBLE);
-                            runSearch();
+
                             threadTwo();
 
                             return true;
@@ -134,7 +134,7 @@ public class v_search extends Activity {
                 if (!curr.equals("")) {
                     resultList.setVisibility(View.INVISIBLE);
                     loaderIcon.setVisibility(View.VISIBLE);
-                    runSearch();
+
                     threadTwo();
 
 
@@ -168,6 +168,8 @@ public class v_search extends Activity {
                     if (!lastSearch.equals(currentTerm)) {
                         runOnUiThread(new Runnable() {
                             public void run() {
+                                resultList.setVisibility(View.INVISIBLE);
+                                loaderIcon.setVisibility(View.VISIBLE);
                                 threadTwo();
                             }
                         });
@@ -264,10 +266,6 @@ public class v_search extends Activity {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-    public void runSearch() {
-
-
-    }
 
 
     private void threadTwo() {
@@ -277,8 +275,9 @@ public class v_search extends Activity {
                 adapter = rm.loc_searchAdapter(getApplicationContext());
                 resultList.setAdapter(adapter);
 
-                resultList.setVisibility(View.VISIBLE);
+
                 loaderIcon.setVisibility(View.INVISIBLE);
+                resultList.setVisibility(View.VISIBLE);
             }
         };
 
