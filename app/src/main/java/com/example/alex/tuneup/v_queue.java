@@ -78,7 +78,7 @@ public class v_queue extends Activity {
                 });
 
             }
-        }, 0, 1000);
+        }, 0, 5000);
 
 
         // Enables back button on top nav bar
