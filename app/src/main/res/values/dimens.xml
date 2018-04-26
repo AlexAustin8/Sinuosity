@@ -2,4 +2,5 @@
 <resources>
     <dimen name="album_art_dimen">60dip</dimen>
     <dimen name="result_padding">10dip</dimen>
+    <dimen name="upnextalbumartdimen">50dp</dimen>
 </resources>

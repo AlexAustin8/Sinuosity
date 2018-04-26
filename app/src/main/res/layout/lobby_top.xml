@@ -275,8 +275,8 @@
 
                     <ImageView
                         android:id="@+id/album_art_next"
-                        android:layout_width="@dimen/album_art_dimen"
-                        android:layout_height="@dimen/album_art_dimen"
+                        android:layout_width="@dimen/upnextalbumartdimen"
+                        android:layout_height="@dimen/upnextalbumartdimen"
                         />
 
                     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

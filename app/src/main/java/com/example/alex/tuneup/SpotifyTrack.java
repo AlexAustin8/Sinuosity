@@ -42,7 +42,7 @@ public class SpotifyTrack implements Track, SpotifyPlayer.NotificationCallback, 
         try {
             RequestManager r = new RequestManager();
             r.web_lobbyGetData(key);
-            uri = r.loc_lobbyPlaying("uri");
+            uri = "spotify:track:" + r.loc_lobbyPlaying("uri");
             title = r.loc_lobbyPlaying("name");
             artist = r.loc_lobbyPlaying("artist");
         }catch(Exception e){

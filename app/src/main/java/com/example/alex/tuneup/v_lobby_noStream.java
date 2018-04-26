@@ -153,9 +153,25 @@ public class v_lobby_noStream extends Activity {
                 songInfo.setText(getResources().getString(R.string.empty_queue));
                 albumCover.setImageResource(R.drawable.playingalbum);
                 album_art_next.setImageResource(R.drawable.upnextalbum);
-
+                song_title_next.setText(getString(R.string.nextEmpty));
+                artist_name_next.setText(R.string.nextEmptyArtist);
             }else {
+
+                if(rm.loc_lobbyUpNext("name").equals("Error")  && rm.loc_lobbyUpNext("artist").equals("Error")){
+
+                    song_title_next.setText(getString(R.string.nextEmpty));
+                    artist_name_next.setText(R.string.nextEmptyArtist);
+                    album_art_next.setImageResource(R.drawable.upnextalbum);
+
+                } else {
+                    song_title_next.setText(rm.loc_lobbyUpNext("name"));
+                    artist_name_next.setText(rm.loc_lobbyUpNext("artist"));
+                    Bitmap nextIMG = new GetAlbumArt().execute(rm.loc_lobbyUpNext("artwork")).get();
+                    album_art_next.setImageBitmap(nextIMG);
+                }
+
                 String name;
+
                 name = rm.loc_lobbyName();
                 num_members.setText(rm.loc_lobbyMembersCount());
                 lobbyName.setText(name);
@@ -166,10 +182,7 @@ public class v_lobby_noStream extends Activity {
                 numMembers = rm.loc_lobbyMembersCount();
 
 
-                song_title_next.setText(rm.loc_lobbyUpNext("name"));
-                artist_name_next.setText(rm.loc_lobbyUpNext("artist"));
-                Bitmap nextIMG = new GetAlbumArt().execute(rm.loc_lobbyUpNext("artwork")).get();
-                album_art_next.setImageBitmap(nextIMG);
+
 
                 if (rm.loc_lobbyUpNext("src").equals("spotify")) {
                     source_next.setImageResource(R.drawable.spotify);

@@ -130,11 +130,29 @@ public class v_lobby extends AppCompatActivity {
                         r.web_lobbyGetData(key);
                         if(r.loc_lobbyPlaying("name").equals("Error")  && r.loc_lobbyPlaying("artist").equals("Error")){
                             songInfo.setText(getResources().getString(R.string.empty_queue));
+                            song_title_next.setText(getString(R.string.nextEmpty));
+                            artist_name_next.setText(R.string.nextEmptyArtist);
                             albumCover.setImageResource(R.drawable.playingalbum);
                             album_art_next.setImageResource(R.drawable.upnextalbum);
                             r.web_queueShift(key);
                         }else {
                             r.web_lobbyGetData(key);
+
+                            if(r.loc_lobbyUpNext("name").equals("Error")  && r.loc_lobbyUpNext("artist").equals("Error")){
+
+                                song_title_next.setText(getString(R.string.nextEmpty));
+                                artist_name_next.setText(R.string.nextEmptyArtist);
+                                album_art_next.setImageResource(R.drawable.upnextalbum);
+
+                            } else {
+                                song_title_next.setText(r.loc_lobbyUpNext("name"));
+                                artist_name_next.setText(r.loc_lobbyUpNext("artist"));
+                                Bitmap nextIMG = new GetAlbumArt().execute(r.loc_lobbyUpNext("artwork")).get();
+                                album_art_next.setImageBitmap(nextIMG);
+                            }
+
+
+
                             if (currentTrack == null) {
                                 if (r.loc_lobbyPlaying("source").compareTo("soundcloud") == 0) {
                                     currentTrack = new SoundCloudTrack(key);
@@ -149,10 +167,7 @@ public class v_lobby extends AppCompatActivity {
                             songInfo.setText(trackInfo);
                             albumCover.setImageBitmap(img);
                             numMembers = r.loc_lobbyMembersCount();
-                            song_title_next.setText(r.loc_lobbyUpNext("name"));
-                            artist_name_next.setText(r.loc_lobbyUpNext("artist"));
-                            Bitmap nextIMG = new GetAlbumArt().execute(r.loc_lobbyUpNext("artwork")).get();
-                            album_art_next.setImageBitmap(nextIMG);
+
 
                             if(r.loc_lobbyUpNext("src").equals("spotify")) {
                                 source_next.setImageResource(R.drawable.spotify);
