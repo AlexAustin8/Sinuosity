@@ -17,10 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
+import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.Config;
 
 import java.net.URLDecoder;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class v_lobby extends AppCompatActivity {
@@ -36,10 +39,29 @@ public class v_lobby extends AppCompatActivity {
     private ImageView backButton, bSetting;
     private String key, trackInfo, numMembers;
     private Track currentTrack;
+    private boolean valid = true;
     private RequestManager r;
+    private Timer t = new Timer();
+
+    /*//Thread to update lobby data
+    private Thread streamCompletionCheck = new Thread("Stream Check") {
+        public void run() {
+            while (!currentTrack.isStreamFinished()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    Log.i("Thread Error", e.getMessage());
+                }
+            }
+            r.web_queueShift(key);
+        }
+    };*/
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("Create Status", "We got Here!");
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
         key = i.getExtras().getString("lobbyKey");   //Proper lobby key should always be sent as an intent extra
@@ -74,33 +96,52 @@ public class v_lobby extends AppCompatActivity {
         bSetting = findViewById(R.id.bSetting);
         //End UI Assignment
 
+        //Authenticate with Spotify
+        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
+                AuthenticationResponse.Type.TOKEN,
+                REDIRECT_URI);
+        builder.setScopes(new String[]{"user-read-private", "streaming"});
+        AuthenticationRequest request = builder.build();
+        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+
+
         //Declare Request Manager to use within the rest of the activity
         r = new RequestManager();
 
 
-        //Declare Thread that determines when to change track
-        Thread streamCompletionCheck = new Thread("Stream Check") {
+        t.schedule(new TimerTask() {
+
+            @Override
             public void run() {
-                while (!currentTrack.isStreamFinished()) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        Log.i("Thread Error", e.getMessage());
-                    }
+                if(currentTrack != null && currentTrack.isStreamFinished()){
+                    r.web_queueShift(key);
+                    currentTrack = null;
                 }
-                r.web_queueShift(key);
+                if(valid) {
+                    populateLobby();
+                }
             }
-        };
+        }, 0, 3000);
+
 
 
         //Initial Lobby creation for whatever the current song is when lobby is first joined by user
-        populateLobby();
+        //  populateLobby();
 
         //Declare listeners for all Buttons
         backButton.setOnClickListener(buttonListener);
         playButton.setOnClickListener(buttonListener);
         searchButton.setOnClickListener(buttonListener);
         viewQueue.setOnClickListener(buttonListener);
+    }
+
+       /*while (true) {
+        try {
+                if(currentTrack != null) {
+                    streamCompletionCheck.start();
+                    streamCompletionCheck.join();
+                    populateLobby();
+                }
         bSetting.setOnClickListener(buttonListener);
         while (true) {
             try {
@@ -111,28 +152,45 @@ public class v_lobby extends AppCompatActivity {
                 Log.i("Thread Error", e.getMessage());
             }
         }
-    }
-
-
+    }*/
 
 
 
     protected void populateLobby() {
         try {
-            r.web_lobbyGetData(key);
-            if (r.loc_lobbyPlaying("source").compareTo("Soundcloud") == 0) {
-                currentTrack = new SoundCloudTrack(key);
-            } else {
-                currentTrack = new SpotifyTrack(key, playerConfig);
-            }
+          /*  r.web_lobbyGetData(key);
+            if(currentTrack == null) {
+                if (r.loc_lobbyPlaying("source").compareTo("soundcloud") == 0) {
+                    currentTrack = new SoundCloudTrack(key);
+                } else if (r.loc_lobbyPlaying("source").compareTo("spotify") == 0) {
+                    currentTrack = new SpotifyTrack(key, playerConfig);
+                }
+            }*/
             //Populate data, this maybe could use some refactoring, since we are declaring a track object that can hold some of these values
-            name = r.loc_lobbyName();
-            lobbyName.setText(URLDecoder.decode(name, "UTF-8"));
-            trackInfo = URLDecoder.decode((r.loc_lobbyPlaying("name") + " - " + r.loc_lobbyPlaying("artist")), "UTF-8");
-            songInfo.setText(trackInfo);
-            Bitmap img = new GetAlbumArt().execute(r.loc_lobbyPlaying("artwork")).get();
-            albumCover.setImageBitmap(img);
-            numMembers = r.loc_lobbyMembersCount();
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    try {
+                        r.web_lobbyGetData(key);
+                        if(currentTrack == null) {
+                            if (r.loc_lobbyPlaying("source").compareTo("soundcloud") == 0) {
+                                currentTrack = new SoundCloudTrack(key);
+                            } else if (r.loc_lobbyPlaying("source").compareTo("spotify") == 0) {
+                                currentTrack = new SpotifyTrack(key, playerConfig);
+                            }
+                        }
+                        Bitmap img = new GetAlbumArt().execute(r.loc_lobbyPlaying("artwork")).get();
+                        name = r.loc_lobbyName();
+                        lobbyName.setText(URLDecoder.decode(name, "UTF-8"));
+                        trackInfo = URLDecoder.decode((r.loc_lobbyPlaying("name") + " - " + r.loc_lobbyPlaying("artist")), "UTF-8");
+                        songInfo.setText(trackInfo);
+                        albumCover.setImageBitmap(img);
+                        numMembers = r.loc_lobbyMembersCount();
+                    }catch (Exception e){
+                        Log.i("Error Updating UI", e.getMessage());
+                    }
+
+                }
+            });
         } catch (Exception e) {
             Log.i("Error loading lobby", e.getMessage());
             Toast.makeText(v_lobby.this, "Error Loading Lobby Data", Toast.LENGTH_LONG).show();
@@ -145,10 +203,11 @@ public class v_lobby extends AppCompatActivity {
             Intent i;
             switch (v.getId()) {
                 case R.id.bSetting:
-                    i = new Intent(getApplicationContext(), v_settings.class);
-                    startActivity(i);
+                    //i = new Intent(getApplicationContext(), v_settings.class);
+                    //startActivity(i);
                     break;
                 case R.id.bAddSong:
+                    valid = false;
                     i = new Intent(getApplicationContext(), v_search.class);
                     i.putExtra("lobbyKey", key);
                     startActivity(i);
@@ -162,12 +221,18 @@ public class v_lobby extends AppCompatActivity {
                     break;
 
                 case R.id.play_button:
-                    if (currentTrack.isPlaying()) {
-                        currentTrack.pause();
-                        playButton.setText(getResources().getString(R.string.resume));
-                    } else if (!currentTrack.isPlaying()) {
-                        currentTrack.resume();
-                        playButton.setText(getResources().getString(R.string.pause));
+                    valid = true;
+                    if(currentTrack == null){
+                        Toast.makeText(v_lobby.this, "No Songs in Queue", Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        if (currentTrack.isPlaying()) {
+                            currentTrack.pause();
+                            playButton.setText(getResources().getString(R.string.resume));
+                        } else if (!currentTrack.isPlaying()) {
+                            currentTrack.resume();
+                            playButton.setText(getResources().getString(R.string.pause));
+                        }
                     }
                     break;
 
@@ -175,6 +240,7 @@ public class v_lobby extends AppCompatActivity {
                     i = new Intent(getApplicationContext(), v_home.class);
                     i.putExtra("lobbyKey", key);
                     startActivity(i);
+
                     break;
 
 
@@ -194,9 +260,11 @@ public class v_lobby extends AppCompatActivity {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
                 playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
-                currentTrack = new SpotifyTrack(playerConfig);
+                //currentTrack = new SpotifyTrack(playerConfig);
             }
         }
+
+
     }
 
 

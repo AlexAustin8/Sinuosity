@@ -66,7 +66,7 @@ public class v_create_lobby extends AppCompatActivity {
 
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("lobbyID", code);
-            editor.apply();
+            editor.commit();
 
             Intent i = new Intent(getApplicationContext(), v_lobby.class);
             i.putExtra("lobbyKey", code);
