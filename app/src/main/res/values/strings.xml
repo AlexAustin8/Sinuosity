@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">TuneUp</string>
+
+    <string name="search_hint">Enter A Song</string>
+    <string name="spotify_search_hint">Spotify</string>
+    <string name="spotify_cid">cf7eda43f4ab43e59c74091e4259d9b2</string>
+    <string name="spotify_redir">tuneup-log://callback</string>
+    <string name="soundcloud_search_hint">Soundcloud</string>
+    <string name="song_title">Song Title</string>
+    <string name="queue">THE QUEUE</string>
+    <string name="sc">soundcloud</string>
+    <string name="sp">spotify</string>
+    <string name="sample_key">123456</string>
+    <string name="join_party">JOIN THE PARTY</string>
+    <string name="create_party">CREATE A NEW PARTY</string>
+    <string name="collab">SHARE, COLLABORATE, JAM</string>
+    <string name="sample_name">Johnny Appleseed</string>
+    <string name="d_name">DISPLAY NAME</string>
+    <string name="ok">OKAY</string>
+    <string name="l_Create">CREATE LOBBY</string>
+    <string name="l_name">Lobby Name</string>
+
+
+
+
+
+
+
+
+    <string name="empty_queue">No Songs Currently in Queue</string>
+    <string name="load_error">Error Loading Lobby Data</string>
+    <string name="server_address">https://jailbreakme.ml/sinc/</string>
+
+    <string name="resume">RESUME</string>
+    <string name="pause">PAUSE</string>
+
+
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+
+</resources>

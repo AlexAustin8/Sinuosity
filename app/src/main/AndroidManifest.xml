@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.alex.tuneup">
+
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".v_home"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.spotify.sdk.android.authentication.LoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".v_lobby_noStream" />
+        <activity android:name=".v_search" />
+        <activity android:name=".v_lobby" />
+        <activity android:name=".v_create_lobby"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+
+            />
+        <activity android:name=".v_settings"
+            android:theme="@style/AppTheme.Base"></activity>
+        <activity android:name=".v_queue"></activity>
+        <activity android:name=".v_first_open"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+
+    </application>
+
+
+</manifest>

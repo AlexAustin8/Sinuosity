@@ -1,0 +1,24 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#000000">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="com.example.alex.tuneup.v_settings$GeneralPreferenceFragment"
+        android:title="General">
+        <extra android:name="settings" android:value="prefs_general" ></extra>
+    </header>
+
+    <header
+        android:fragment="com.example.alex.tuneup.v_settings$GeneralPreferenceFragment"
+        android:title="Notifications" >
+        <extra android:name="settings" android:value="prefs_notification" ></extra>
+    </header>
+
+    <header
+        android:fragment="com.example.alex.tuneup.v_settings$GeneralPreferenceFragment"
+        android:title="Data sync" >
+        <extra android:name="settings" android:value="prefs_sync" ></extra>
+    </header>
+
+</preference-headers>

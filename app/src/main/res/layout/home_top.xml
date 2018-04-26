@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="170dp"
+        android:orientation="vertical">
+    </LinearLayout>
+
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:orientation="vertical"
+            android:gravity="center"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
+            android:layout_marginTop="40dp">
+
+            <EditText
+                android:id="@+id/lobby_search"
+
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="-100dp"
+                android:background="@drawable/join_party_text"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="textPersonName"
+                android:hint="@string/sample_key"
+                android:text=""
+                android:textColorHint="#646a7c"
+
+                android:textColor="#ffffff"
+                android:textSize="28sp"
+                android:padding="10dp"
+                android:letterSpacing=".2"
+                />
+
+            <Button
+                android:id="@+id/submit_lobby_search"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/join_party"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="-412px"
+            android:orientation="vertical"
+            android:layout_marginTop="-100dp"
+          >
+
+            <Button
+                android:id="@+id/create_button"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/create_party_button"
+                android:text="@string/create_party"
+                android:textColor="#ffffff"
+                android:elevation="10dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
